@@ -4,6 +4,8 @@ import br.com.techsolucoes.ControleEstoque.model.Categoria;
 import br.com.techsolucoes.ControleEstoque.repository.CategoriaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CategoriaService {
 
@@ -15,5 +17,9 @@ public class CategoriaService {
 
     public Categoria salvarCategoria(Categoria categoria){
         return categoriaRepository.save(categoria);
+    }
+
+    public List<Categoria> listarCategoria(){
+        return categoriaRepository.findAll();
     }
 }
