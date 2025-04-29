@@ -29,5 +29,10 @@ public class CategoriaController {
         return categoriaService.listarCategoria();
     }
 
+    @GetMapping("/{id}")
+    public Categoria buscarPorId(@PathVariable long id){
+        return categoriaService.buscarPorId(id);
+    }
+
 
 }
