@@ -34,5 +34,11 @@ public class CategoriaController {
         return categoriaService.buscarPorId(id);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarCategoria(@PathVariable long id){
+        categoriaService.deletarCategoria(id);
+        return ResponseEntity.noContent().build(); //Retorna 204
+    }
+
 
 }
