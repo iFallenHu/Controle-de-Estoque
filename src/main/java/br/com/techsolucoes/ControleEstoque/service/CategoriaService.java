@@ -12,36 +12,36 @@ public class CategoriaService {
 
     private final CategoriaRepository categoriaRepository; //referencia da instancia da interface.
 
-    public CategoriaService(CategoriaRepository categoriaRepository){
+    public CategoriaService(CategoriaRepository categoriaRepository) {
         this.categoriaRepository = categoriaRepository;
     }
 
-    public Categoria salvarCategoria(Categoria categoria){
+    public Categoria salvarCategoria(Categoria categoria) {
         return categoriaRepository.save(categoria);
     }
 
-    public List<Categoria> listarCategoria(){
+    public List<Categoria> listarCategoria() {
         return categoriaRepository.findAll();
     }
 
-    public Categoria buscarPorId(long id){
-        return categoriaRepository.findById( id)
-        .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+    public Categoria buscarPorId(long id) {
+        return categoriaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
     }
 
-    public void deletarCategoria(long id){
-       Categoria categoria = categoriaRepository.findById(id)
-               .orElseThrow(()->new RuntimeException("Categoria não encontrada"));
+    public void deletarCategoria(long id) {
+        Categoria categoria = categoriaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
 
-               categoriaRepository.deleteById(id);
-        }
+        categoriaRepository.deleteById(id);
+    }
 
-        public Categoria atualizarCategoria(long id, CategoriaDTO dto){
-            Categoria categoria = categoriaRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+    public Categoria atualizarCategoria(long id, CategoriaDTO dto) {
+        Categoria categoria = categoriaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
 
-            categoria.setNome(dto.getNome());
-            return categoriaRepository.save(categoria);
-        }
+        categoria.setNome(dto.getNome());
+        return categoriaRepository.save(categoria);
+    }
 
 }
