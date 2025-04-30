@@ -15,7 +15,7 @@ public class CategoriaController {
 
     private final CategoriaService categoriaService;
 
-    public CategoriaController(CategoriaService categoriaService){
+    public CategoriaController(CategoriaService categoriaService) {
         this.categoriaService = categoriaService;
     }
 
@@ -26,23 +26,28 @@ public class CategoriaController {
     }
 
     @GetMapping
-    public List<Categoria> listarCategoria(){
-        return categoriaService.listarCategoria();
+    public ResponseEntity<List<Categoria>> listarCategoria() {
+        List<Categoria> categoria = categoriaService.listarCategoria();
+        if (categoria.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(categoria);
     }
 
     @GetMapping("/{id}")
-    public Categoria buscarPorId(@PathVariable long id){
-        return categoriaService.buscarPorId(id);
+    public ResponseEntity<Categoria> buscarPorId(@PathVariable long id) {
+        Categoria categoria = categoriaService.buscarPorId(id);
+        return ResponseEntity.ok(categoria);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarCategoria(@PathVariable long id){
+    public ResponseEntity<Void> deletarCategoria(@PathVariable long id) {
         categoriaService.deletarCategoria(id);
         return ResponseEntity.noContent().build(); //Retorna 204
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Categoria> atualizarCategoria(@PathVariable long id, @RequestBody CategoriaDTO dto){
+    public ResponseEntity<Categoria> atualizarCategoria(@PathVariable long id, @RequestBody CategoriaDTO dto) {
         Categoria categoriaAtualizada = categoriaService.atualizarCategoria(id, dto);
         return ResponseEntity.ok(categoriaAtualizada);
     }
