@@ -1,5 +1,6 @@
 package br.com.techsolucoes.ControleEstoque.controller;
 
+import br.com.techsolucoes.ControleEstoque.DTO.CategoriaDTO;
 import br.com.techsolucoes.ControleEstoque.model.Categoria;
 import br.com.techsolucoes.ControleEstoque.service.CategoriaService;
 import org.springframework.http.HttpStatus;
@@ -38,6 +39,12 @@ public class CategoriaController {
     public ResponseEntity<Void> deletarCategoria(@PathVariable long id){
         categoriaService.deletarCategoria(id);
         return ResponseEntity.noContent().build(); //Retorna 204
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Categoria> atualizarCategoria(@PathVariable long id, @RequestBody CategoriaDTO dto){
+        Categoria categoriaAtualizada = categoriaService.atualizarCategoria(id, dto);
+        return ResponseEntity.ok(categoriaAtualizada);
     }
 
 
