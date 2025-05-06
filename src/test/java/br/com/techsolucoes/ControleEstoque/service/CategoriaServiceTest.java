@@ -57,5 +57,38 @@ public class CategoriaServiceTest {
         });
     }
 
+    @Test
+    void deveSalvarCategoriaComSucesso(){
+
+        //Arrange
+        Categoria novaCategoria = new Categoria();
+        novaCategoria.setNome("Informática");
+
+        Categoria categoriaSalva = new Categoria();
+        categoriaSalva.setId(1L);
+        categoriaSalva.setNome("Informática");
+
+        Mockito.when(categoriaRepository.save(novaCategoria))
+                .thenReturn(categoriaSalva);
+
+
+        //Act
+
+        Categoria resultado = categoriaService.salvarCategoria(novaCategoria);
+
+        //Assert
+
+        assertNotNull(resultado);
+        assertEquals(1L, resultado.getId());
+        assertEquals("Informática", resultado.getNome());
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoCategoriaForNull(){
+        assertThrows(IllegalArgumentException.class, () -> {
+           categoriaService.salvarCategoria(null);
+        });
+
+    }
 
 }
