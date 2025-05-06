@@ -24,7 +24,11 @@ public class CategoriaService {
     }
 
     public List<Categoria> listarCategoria() {
-        return categoriaRepository.findAll();
+        List<Categoria> categorias = categoriaRepository.findAll();
+        if (categorias.isEmpty()) {
+            throw new IllegalStateException("Nenhuma categoria encontrada.");
+        }
+        return categorias;
     }
 
     public Categoria buscarPorId(long id) {
