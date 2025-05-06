@@ -1,5 +1,6 @@
 package br.com.techsolucoes.ControleEstoque.service;
 
+import br.com.techsolucoes.ControleEstoque.DTO.CategoriaDTO;
 import br.com.techsolucoes.ControleEstoque.model.Categoria;
 import br.com.techsolucoes.ControleEstoque.repository.CategoriaRepository;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.any;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CategoriaServiceTest {
@@ -36,7 +39,7 @@ public class CategoriaServiceTest {
         categoriaMock.setId(id);
         categoriaMock.setNome("Eletrônicos");
 
-        Mockito.when(categoriaRepository.findById(id))
+        when(categoriaRepository.findById(id))
                 .thenReturn(Optional.of(categoriaMock));
 
         // Act
@@ -52,7 +55,7 @@ public class CategoriaServiceTest {
     void deveLancarExcecaoQuandoIdNaoExistir() {
         // Arrange
         Long id = 999L;
-        Mockito.when(categoriaRepository.findById(id))
+        when(categoriaRepository.findById(id))
                 .thenReturn(Optional.empty());
 
         // Act & Assert
@@ -72,7 +75,7 @@ public class CategoriaServiceTest {
         categoriaSalva.setId(1L);
         categoriaSalva.setNome("Informática");
 
-        Mockito.when(categoriaRepository.save(novaCategoria))
+        when(categoriaRepository.save(novaCategoria))
                 .thenReturn(categoriaSalva);
 
 
@@ -108,7 +111,7 @@ public class CategoriaServiceTest {
 
         List<Categoria> categorias = Arrays.asList(cat1, cat2);
 
-        Mockito.when(categoriaRepository.findAll()).thenReturn(categorias);
+        when(categoriaRepository.findAll()).thenReturn(categorias);
 
         //Act
         List<Categoria> resultado = categoriaService.listarCategoria();
@@ -123,9 +126,53 @@ public class CategoriaServiceTest {
     @Test
     void deveLancarExcecaoQuandoNaoExistiremCategorias(){
         //Arrange
-        Mockito.when(categoriaRepository.findAll()).thenReturn(Collections.emptyList());
+        when(categoriaRepository.findAll()).thenReturn(Collections.emptyList());
 
         //Act & Assert
         assertThrows(IllegalStateException.class, () -> categoriaService.listarCategoria());
+    }
+
+    @Test
+    void deveAtualizarCategoriasComSucesso(){
+        // Arrange
+        long id = 1L;
+        Categoria categoriaExistente = new Categoria();
+        categoriaExistente.setId(id);
+        categoriaExistente.setNome("Antigo Nome");
+
+        CategoriaDTO dto = new CategoriaDTO();
+        dto.setNome("Novo Nome");
+
+        when(categoriaRepository.findById(id)).thenReturn(Optional.of(categoriaExistente));
+        when(categoriaRepository.save(Mockito.<Categoria>any())).thenAnswer(invocation -> invocation.getArgument(0));
+
+
+        // Act
+        Categoria categoriaAtualizada = categoriaService.atualizarCategoria(id, dto);
+
+        // Assert
+        assertNotNull(categoriaAtualizada);
+        assertEquals("Novo Nome", categoriaAtualizada.getNome());
+        verify(categoriaRepository).findById(id);
+        verify(categoriaRepository).save(categoriaExistente);
+    }
+
+    @Test
+    void DeveLancarexcecaoQuandoNaoAtualizar(){
+        // Arrange
+        long id = 1L;
+        CategoriaDTO dto = new CategoriaDTO();
+        dto.setNome("Qualquer Nome");
+
+        when(categoriaRepository.findById(id)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            categoriaService.atualizarCategoria(id, dto);
+        });
+
+        assertEquals("Categoria não encontrada", exception.getMessage());
+        verify(categoriaRepository).findById(id);
+        verify(categoriaRepository, never()).save(Mockito.<Categoria>any());
     }
 }
