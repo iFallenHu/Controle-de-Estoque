@@ -21,8 +21,12 @@ public class CategoriaController {
 
     @PostMapping
     public ResponseEntity<Categoria> criarCategoria(@RequestBody Categoria categoria) {
-        Categoria novaCategoria = categoriaService.salvarCategoria(categoria);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novaCategoria);
+        try {
+            Categoria novaCategoria = categoriaService.salvarCategoria(categoria);
+            return new ResponseEntity<>(novaCategoria, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping
