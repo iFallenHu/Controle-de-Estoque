@@ -166,13 +166,52 @@ public class CategoriaServiceTest {
 
         when(categoriaRepository.findById(id)).thenReturn(Optional.empty());
 
-        // Act & Assert
+        // Act
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             categoriaService.atualizarCategoria(id, dto);
         });
 
+        //Assert
         assertEquals("Categoria não encontrada", exception.getMessage());
         verify(categoriaRepository).findById(id);
         verify(categoriaRepository, never()).save(Mockito.<Categoria>any());
+    }
+
+    @Test
+    void DeveDeletarCategoriasComSucesso(){
+
+        //Arrange
+        Long id = 1L;
+        Categoria categoriaExistente = new Categoria();
+        categoriaExistente.setId(id);
+        categoriaExistente.setNome("Categoria Teste");
+
+        when(categoriaRepository.findById(id)).thenReturn(Optional.of(categoriaExistente));
+
+        //Act
+        categoriaService.deletarCategoria(id);
+
+        //Assert
+        verify(categoriaRepository).findById(id);
+        verify(categoriaRepository).deleteById(id);
+    }
+
+    @Test
+    void DeveLancarExcecaoQuandoNaoEncontrarCategoria(){
+
+        //Arrange
+        Long id = 1L;
+        when(categoriaRepository.findById(id)).thenReturn(Optional.empty());
+
+        //Act
+        RuntimeException exception = assertThrows(RuntimeException.class, () ->{
+            categoriaService.deletarCategoria(id);
+        });
+
+        //Assert
+        assertEquals("Categoria não encontrada", exception.getMessage());
+        verify(categoriaRepository).findById(id);
+        verify(categoriaRepository, never()).delete(Mockito.<Categoria>any());
+
     }
 }
