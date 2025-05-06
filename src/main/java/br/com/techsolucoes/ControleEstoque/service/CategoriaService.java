@@ -17,6 +17,9 @@ public class CategoriaService {
     }
 
     public Categoria salvarCategoria(Categoria categoria) {
+        if (categoria == null){
+            throw new IllegalArgumentException("Categoria não pode ser nula");
+        }
         return categoriaRepository.save(categoria);
     }
 
