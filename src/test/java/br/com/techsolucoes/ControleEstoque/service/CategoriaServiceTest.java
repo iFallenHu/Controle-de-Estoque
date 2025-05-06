@@ -8,7 +8,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.util.Assert;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -91,4 +95,37 @@ public class CategoriaServiceTest {
 
     }
 
+    @Test
+    void deveListarCategoriasComSucesso(){
+        //Arrange
+        Categoria cat1 = new Categoria();
+        cat1.setId(1L);
+        cat1.setNome("Informática");
+
+        Categoria cat2 =new Categoria();
+        cat2.setId(2L);
+        cat2.setNome("Alimentos");
+
+        List<Categoria> categorias = Arrays.asList(cat1, cat2);
+
+        Mockito.when(categoriaRepository.findAll()).thenReturn(categorias);
+
+        //Act
+        List<Categoria> resultado = categoriaService.listarCategoria();
+
+        //Assert
+        assertNotNull(resultado);
+        assertEquals(2,resultado.size());
+        assertEquals("Informática", resultado.get(0).getNome());
+        assertEquals("Alimentos", resultado.get(1).getNome());
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoNaoExistiremCategorias(){
+        //Arrange
+        Mockito.when(categoriaRepository.findAll()).thenReturn(Collections.emptyList());
+
+        //Act & Assert
+        assertThrows(IllegalStateException.class, () -> categoriaService.listarCategoria());
+    }
 }
