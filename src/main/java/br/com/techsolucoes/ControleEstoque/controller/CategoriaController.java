@@ -1,6 +1,7 @@
 package br.com.techsolucoes.ControleEstoque.controller;
 
 import br.com.techsolucoes.ControleEstoque.DTO.CategoriaDTO;
+import br.com.techsolucoes.ControleEstoque.exception.CategoriaNotFoundException;
 import br.com.techsolucoes.ControleEstoque.model.Categoria;
 import br.com.techsolucoes.ControleEstoque.service.CategoriaService;
 import org.springframework.http.HttpStatus;
@@ -40,8 +41,12 @@ public class CategoriaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Categoria> buscarPorId(@PathVariable long id) {
-        Categoria categoria = categoriaService.buscarPorId(id);
-        return ResponseEntity.ok(categoria);
+        try {
+            Categoria categoria = categoriaService.buscarPorId(id);
+            return ResponseEntity.ok(categoria);
+        } catch (CategoriaNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
@@ -55,6 +60,7 @@ public class CategoriaController {
         Categoria categoriaAtualizada = categoriaService.atualizarCategoria(id, dto);
         return ResponseEntity.ok(categoriaAtualizada);
     }
+
 
 
 }
