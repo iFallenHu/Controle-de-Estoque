@@ -1,6 +1,7 @@
 package br.com.techsolucoes.ControleEstoque.service;
 
 import br.com.techsolucoes.ControleEstoque.DTO.CategoriaDTO;
+import br.com.techsolucoes.ControleEstoque.exception.CategoriaNotFoundException;
 import br.com.techsolucoes.ControleEstoque.model.Categoria;
 import br.com.techsolucoes.ControleEstoque.repository.CategoriaRepository;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class CategoriaService {
 
     public Categoria buscarPorId(long id) {
         return categoriaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+                .orElseThrow(() -> new CategoriaNotFoundException("Categoria com ID" + id + "Não encontrada"));
     }
 
     public void deletarCategoria(long id) {
@@ -50,5 +51,6 @@ public class CategoriaService {
         categoria.setNome(dto.getNome());
         return categoriaRepository.save(categoria);
     }
+
 
 }
