@@ -11,6 +11,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -94,5 +97,35 @@ public class CategoriaControllerTest {
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertNull(response.getBody());
+    }
+
+    @Test
+    void deveRetornarListaCategoriaERetornar200(){
+        //Arrange
+
+        Categoria cat1 = new Categoria();
+        cat1.setId(1L);
+        cat1.setNome("Informática");
+
+        Categoria cat2 =new Categoria();
+        cat2.setId(2L);
+        cat2.setNome("Alimentos");
+
+        List<Categoria> categoria = Arrays.asList(cat1, cat2);
+        when(categoriaService.listarCategoria()).thenReturn(categoria);
+
+        //Act
+        ResponseEntity<List<Categoria>> response = categoriaController.listarCategoria();
+
+        //Assert
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(2, response.getBody().size());
+        assertEquals("Informática", response.getBody().get(0).getNome());
+
+
+
+
+
     }
 }
