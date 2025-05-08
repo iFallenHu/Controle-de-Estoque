@@ -32,11 +32,11 @@ public class CategoriaController {
 
     @GetMapping
     public ResponseEntity<List<Categoria>> listarCategoria() {
-        List<Categoria> categoria = categoriaService.listarCategoria();
-        if (categoria.isEmpty()) {
-            return ResponseEntity.noContent().build();
+        try {
+            return ResponseEntity.ok(categoriaService.listarCategoria());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        return ResponseEntity.ok(categoria);
     }
 
     @GetMapping("/{id}")
