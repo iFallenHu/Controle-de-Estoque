@@ -2,7 +2,7 @@ package br.com.techsolucoes.ControleEstoque.service;
 
 import br.com.techsolucoes.ControleEstoque.DTO.CategoriaDTO;
 import br.com.techsolucoes.ControleEstoque.exception.CategoriaNotFoundException;
-import br.com.techsolucoes.ControleEstoque.model.Categoria;
+import br.com.techsolucoes.ControleEstoque.entity.Categoria;
 import br.com.techsolucoes.ControleEstoque.repository.CategoriaRepository;
 import org.springframework.stereotype.Service;
 

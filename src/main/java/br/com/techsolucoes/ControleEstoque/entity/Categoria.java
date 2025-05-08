@@ -1,4 +1,4 @@
-package br.com.techsolucoes.ControleEstoque.model;
+package br.com.techsolucoes.ControleEstoque.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
