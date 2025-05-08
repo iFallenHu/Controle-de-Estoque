@@ -1,0 +1,125 @@
+[33mcommit bf4d618dcb26dac68c245fcce5c2dfdea27852b2[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/categoria[m[33m, [m[1;31morigin/feature/categoria[m[33m)[m
+Author: Luan Reis <luannascimento.microcamp@gmail.com>
+Date:   Tue May 6 01:08:57 2025 -0300
+
+    teste do metodo delete
+
+[33mcommit 4df96ff413f19e2f5cc38d53de7c173c9d35c4ec[m
+Author: Luan Reis <luannascimento.microcamp@gmail.com>
+Date:   Tue May 6 00:34:05 2025 -0300
+
+    Teste do metodo Atualizar
+
+[33mcommit d8b090cd4442435c58005eb9951f24c0bc5c7de0[m
+Author: Luan Reis <luannascimento.microcamp@gmail.com>
+Date:   Mon May 5 22:31:02 2025 -0300
+
+    Corrigindo espaço entre notações
+
+[33mcommit 1cd64dd87b18026b28990800a9562700169ca496[m
+Author: Luan Reis <luannascimento.microcamp@gmail.com>
+Date:   Mon May 5 22:28:24 2025 -0300
+
+    Utilizando a classe wrapper
+
+[33mcommit 56fc715e51aa93ec52de805528f46d29933333f3[m
+Author: Luan Reis <luannascimento.microcamp@gmail.com>
+Date:   Mon May 5 22:16:45 2025 -0300
+
+    Teste do metodo Listar
+
+[33mcommit 9e4948944dbf3aded6f6fd0e35b9a871901a1e69[m
+Author: Luan Reis <luannascimento.microcamp@gmail.com>
+Date:   Mon May 5 22:04:52 2025 -0300
+
+    Exceção no metodo Listar
+
+[33mcommit dbfee04acae66b66f033591332710932c032f51f[m
+Author: Luan Reis <luannascimento.microcamp@gmail.com>
+Date:   Mon May 5 21:44:06 2025 -0300
+
+    Teste metodo Salvar
+
+[33mcommit 152e6bf9d748632fe80052d327d603180b5d2a57[m
+Author: Luan Reis <luannascimento.microcamp@gmail.com>
+Date:   Mon May 5 21:28:00 2025 -0300
+
+    Exceção no metodo salvar
+
+[33mcommit dd04658019225a3d11e4f50035f9e5bdc53cf96d[m
+Author: Luan Reis <luannascimento.microcamp@gmail.com>
+Date:   Mon May 5 20:49:59 2025 -0300
+
+    Test de busca por id
+
+[33mcommit 27dba20e97bce3e80c7d42edfc2da18443510c07[m
+Author: Luan Reis <luannascimento.microcamp@gmail.com>
+Date:   Mon May 5 20:48:15 2025 -0300
+
+    usando @data
+
+[33mcommit e4f686c8bfe90df3c10ef2070ff34136b1be25bd[m
+Author: Luan Reis <luannascimento.microcamp@gmail.com>
+Date:   Thu May 1 21:25:27 2025 -0300
+
+    Adicionando dependência para testes
+
+[33mcommit 834aa01fa6c3912d40f4f0cf79ae99039fa3a238[m
+Author: Luan Reis <luannascimento.microcamp@gmail.com>
+Date:   Wed Apr 30 16:45:24 2025 -0300
+
+    Padronizando o uso da classe ResponseEntity
+
+[33mcommit 39594e272c24e0269a7def4656adc26b1bd03fa6[m
+Author: Luan Reis <luannascimento.microcamp@gmail.com>
+Date:   Wed Apr 30 15:58:19 2025 -0300
+
+    Usando Lombok na classe
+
+[33mcommit 286103d79a57d928624a86f08fd998380005d8bd[m
+Author: Luan Reis <luannascimento.microcamp@gmail.com>
+Date:   Wed Apr 30 15:53:00 2025 -0300
+
+    identando a classe service
+
+[33mcommit 8f38d8f1e1f733d1a9616d001729d87ef7f99b1b[m
+Author: Luan Reis <luannascimento.microcamp@gmail.com>
+Date:   Tue Apr 29 21:50:18 2025 -0300
+
+    implementing update
+
+[33mcommit 599b0d488a30e314f8c7e849e7536d4c64de3fdc[m
+Author: Luan Reis <luannascimento.microcamp@gmail.com>
+Date:   Tue Apr 29 21:49:22 2025 -0300
+
+    Created package DTO
+
+[33mcommit 123f43244a8d038c73e18bec5bc0fab11ae3480e[m
+Author: Luan Reis <luannascimento.microcamp@gmail.com>
+Date:   Tue Apr 29 19:52:13 2025 -0300
+
+    implementing delete
+
+[33mcommit 628d6e067454a17aa37b970e0cb3ee7332af104b[m
+Author: Luan Reis <luannascimento.microcamp@gmail.com>
+Date:   Tue Apr 29 17:03:41 2025 -0300
+
+    implementing search by id
+
+[33mcommit b796323dd3710c013b4645a22c06a1c80ca59907[m
+Author: Luan Reis <luannascimento.microcamp@gmail.com>
+Date:   Tue Apr 29 15:06:15 2025 -0300
+
+    implementing category listing
+
+[33mcommit e6881ced8d6f8884fbdc0374fadbda8fbda67b5b[m
+Author: Luan Reis <luannascimento.microcamp@gmail.com>
+Date:   Sun Apr 27 23:47:02 2025 -0300
+
+    create inserts
+
+[33mcommit 0455fa684016d996b30ca6030cb76fb818bb12ed[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/develop[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: Luan Reis <luannascimento.microcamp@gmail.com>
+Date:   Fri Apr 25 21:49:18 2025 -0300
+
+    Inicio_Projeto
