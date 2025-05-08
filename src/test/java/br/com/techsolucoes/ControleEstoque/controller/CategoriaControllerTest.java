@@ -65,7 +65,7 @@ public class CategoriaControllerTest {
     }
 
     @Test
-    void deveBuscarIdERetornar200(){
+    void deveBuscarIdERetornar200() {
 
         //Arrange
         Categoria categoria = new Categoria();
@@ -87,7 +87,7 @@ public class CategoriaControllerTest {
     }
 
     @Test
-    void deveRetornar404QuandoCategoriaNaoEncontrada(){
+    void deveRetornar404QuandoCategoriaNaoEncontrada() {
         Long idInexistente = 99L;
 
         when(categoriaService.buscarPorId(idInexistente))
@@ -100,14 +100,14 @@ public class CategoriaControllerTest {
     }
 
     @Test
-    void deveRetornarListaCategoriaERetornar200(){
+    void deveRetornarListaCategoriaERetornar200() {
         //Arrange
 
         Categoria cat1 = new Categoria();
         cat1.setId(1L);
         cat1.setNome("Informática");
 
-        Categoria cat2 =new Categoria();
+        Categoria cat2 = new Categoria();
         cat2.setId(2L);
         cat2.setNome("Alimentos");
 
@@ -124,8 +124,18 @@ public class CategoriaControllerTest {
         assertEquals("Informática", response.getBody().get(0).getNome());
 
 
-
-
-
     }
+
+    @Test
+    void deveRetornar500QuandoServicoLancarExcecao() {
+        // Arrange
+        when(categoriaService.listarCategoria()).thenThrow(new RuntimeException("Erro simulado"));
+
+        // Act
+        ResponseEntity<List<Categoria>> response = categoriaController.listarCategoria();
+
+        // Assert
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
 }
