@@ -26,7 +26,8 @@ public class CategoriaController {
             Categoria novaCategoria = categoriaService.salvarCategoria(categoria);
             return new ResponseEntity<>(novaCategoria, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+
         }
     }
 
