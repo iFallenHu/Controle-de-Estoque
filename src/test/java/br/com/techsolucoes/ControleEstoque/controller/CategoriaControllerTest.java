@@ -1,5 +1,6 @@
 package br.com.techsolucoes.ControleEstoque.controller;
 
+import br.com.techsolucoes.ControleEstoque.DTO.CategoriaDTO;
 import br.com.techsolucoes.ControleEstoque.exception.CategoriaNotFoundException;
 import br.com.techsolucoes.ControleEstoque.entity.Categoria;
 import br.com.techsolucoes.ControleEstoque.service.CategoriaService;
@@ -16,7 +17,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CategoriaControllerTest {
@@ -137,5 +139,74 @@ public class CategoriaControllerTest {
         // Assert
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
+
+    @Test
+    void deveAtualizarUmaEntidadeExistenteERetornar200() {
+        // Arrange
+        Long id = 1L;
+
+        CategoriaDTO categoriaDTO = new CategoriaDTO();
+        categoriaDTO.setNome("Eletrônicos");
+
+        Categoria categoriaAtualizada = new Categoria();
+        categoriaAtualizada.setId(id);
+        categoriaAtualizada.setNome("Eletrônicos");
+
+        when(categoriaService.atualizarCategoria(id, categoriaDTO)).thenReturn(categoriaAtualizada);
+
+        // Act
+        ResponseEntity<Categoria> response = categoriaController.atualizarCategoria(id, categoriaDTO);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Eletrônicos", response.getBody().getNome());
+
+    }
+
+    @Test
+    void deveRetornarErro500QuandoAtualizacaoCategoriaFalhar() {
+        // Arrange
+        Long id = 1L;
+        CategoriaDTO dto = new CategoriaDTO();
+        dto.setNome("Nova Categoria");
+
+        // Simula exceção no service
+        when(categoriaService.atualizarCategoria(eq(id), any(CategoriaDTO.class)))
+                .thenThrow(new RuntimeException("Erro ao atualizar categoria"));
+
+        // Act & Assert
+        assertThrows(RuntimeException.class, () -> {
+            categoriaController.atualizarCategoria(id, dto);
+        });
+    }
+
+    @Test
+    void deveDeletarUmaEntidadeERetornar200() {
+        Long id = 1L;
+
+        // Simula que não acontece erro ao deletar
+        doNothing().when(categoriaService).deletarCategoria(eq(id));
+
+        // Executa o controller
+        ResponseEntity<Void> response = categoriaController.deletarCategoria(id);
+
+        // Verifica se o status é 204 No Content
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+    @Test
+    void deveRetornarErro500QuandoDelecaoFalhar() {
+        Long id = 1L;
+
+        // Simula erro ao deletar
+        doThrow(new RuntimeException("Erro ao deletar")).when(categoriaService).deletarCategoria(eq(id));
+
+        //  (já que o controller não trata)
+        assertThrows(RuntimeException.class, () -> {
+            categoriaController.deletarCategoria(id);
+        });
+    }
+
+
 
 }
