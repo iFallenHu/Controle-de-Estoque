@@ -25,12 +25,20 @@ public class UsuarioService {
     }
 
     public boolean autenticar(String email, String senha) {
+//        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
+//        if(usuarioOpt.isPresent()) {
+//            Usuario usuario = usuarioOpt.get();
+//            return passwordEncoder.matches(senha, usuario.getSenha());
+//        }
+//        return false;
+
+        System.out.println("INICIANDO A AUTENTICAÇÃO...");
         Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
         if(usuarioOpt.isPresent()) {
             Usuario usuario = usuarioOpt.get();
+            System.out.println("USUÁRIO ENCONTRADO: " + usuario.getEmail());
             return passwordEncoder.matches(senha, usuario.getSenha());
         }
-        //return usuarioOpt.isPresent() && usuarioOpt.get().getSenha().equals(senha);
         return false;
     }
 
