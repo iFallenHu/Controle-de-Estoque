@@ -1,46 +1,47 @@
 package br.com.techsolucoes.ControleEstoque.controller;
 
-import br.com.techsolucoes.ControleEstoque.DTO.CategoriaDTO;
-import br.com.techsolucoes.ControleEstoque.exception.CategoriaNotFoundException;
-import br.com.techsolucoes.ControleEstoque.entity.Categoria;
-import br.com.techsolucoes.ControleEstoque.service.CategoriaService;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+    import br.com.techsolucoes.ControleEstoque.DTO.CategoriaDTO;
+    import br.com.techsolucoes.ControleEstoque.exception.CategoriaNotFoundException;
+    import br.com.techsolucoes.ControleEstoque.entity.Categoria;
+    import br.com.techsolucoes.ControleEstoque.service.CategoriaService;
+    import org.junit.jupiter.api.Test;
+    import org.junit.jupiter.api.extension.ExtendWith;
+    import org.mockito.InjectMocks;
+    import org.mockito.Mock;
+    import org.mockito.junit.jupiter.MockitoExtension;
+    import org.springframework.http.HttpStatus;
+    import org.springframework.http.ResponseEntity;
 
-import java.util.Arrays;
-import java.util.List;
+    import java.util.Arrays;
+    import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+    import static org.junit.jupiter.api.Assertions.*;
+    import static org.mockito.ArgumentMatchers.any;
+    import static org.mockito.ArgumentMatchers.eq;
+    import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-public class CategoriaControllerTest {
+    @ExtendWith(MockitoExtension.class)
+    public class CategoriaControllerTest {
 
-    @Mock
-    private CategoriaService categoriaService;
+        @Mock
+        private CategoriaService categoriaService;
 
-    @InjectMocks
-    private CategoriaController categoriaController;
+        @InjectMocks
+        private CategoriaController categoriaController;
 
-    @Test
-    void deveCriarCategoriaERetornar201() {
+        @Test
+        void deveCriarCategoriaERetornar201() {
 
+            Categoria categoria = new Categoria();
+            categoria.setNome("Tecnologia");
         //Arrange
-        Categoria categoria = new Categoria();
-        categoria.setId(1L);
-        categoria.setNome("Tecnologia");
+        CategoriaDTO categoriaDTO = new CategoriaDTO();
+        categoriaDTO.setNome("Tecnologia");
 
         when(categoriaService.salvarCategoria(any())).thenReturn(categoria);
 
         //Act
-        ResponseEntity<Categoria> response = categoriaController.criarCategoria(categoria);
+        ResponseEntity<Categoria> response = categoriaController.criarCategoria(categoriaDTO);
 
         //Assert
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -51,14 +52,15 @@ public class CategoriaControllerTest {
     void deveRetornarError500QuandoServiceLancarExcecao() {
 
         //Arrange
-        Categoria categoria = new Categoria();
-        categoria.setNome("Tecnologia");
+
+        CategoriaDTO categoriaDTO = new CategoriaDTO();
+        categoriaDTO.setNome("Tecnologia");
 
         when(categoriaService.salvarCategoria(any()))
                 .thenThrow(new RuntimeException("Erro ao salvar categoria"));
 
         //Act
-        ResponseEntity<Categoria> response = categoriaController.criarCategoria(categoria);
+        ResponseEntity<Categoria> response = categoriaController.criarCategoria(categoriaDTO);
 
         //Assert
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());

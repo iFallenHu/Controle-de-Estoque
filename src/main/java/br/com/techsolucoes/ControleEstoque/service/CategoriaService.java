@@ -17,10 +17,12 @@ public class CategoriaService {
         this.categoriaRepository = categoriaRepository;
     }
 
-    public Categoria salvarCategoria(Categoria categoria) {
-        if (categoria == null){
+    public Categoria salvarCategoria(CategoriaDTO categoriaDTO) {
+        if (categoriaDTO == null){
             throw new IllegalArgumentException("Categoria não pode ser nula");
         }
+        Categoria categoria = new Categoria();
+        categoria.setNome(categoriaDTO.getNome());
         return categoriaRepository.save(categoria);
     }
 

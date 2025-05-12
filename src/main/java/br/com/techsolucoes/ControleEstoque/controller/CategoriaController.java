@@ -17,13 +17,24 @@ public class CategoriaController {
     private final CategoriaService categoriaService;
 
     public CategoriaController(CategoriaService categoriaService) {
+
         this.categoriaService = categoriaService;
     }
 
+//    @PostMapping
+//    public ResponseEntity<Categoria> criarCategoria(@RequestBody Categoria categoria) {
+//        try {
+//            Categoria novaCategoria = categoriaService.salvarCategoria(categoria);
+//            return new ResponseEntity<>(novaCategoria, HttpStatus.CREATED);
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//
+//        }
+//    }
     @PostMapping
-    public ResponseEntity<Categoria> criarCategoria(@RequestBody Categoria categoria) {
+    public ResponseEntity<Categoria> criarCategoria(@RequestBody CategoriaDTO categoriaDTO) {
         try {
-            Categoria novaCategoria = categoriaService.salvarCategoria(categoria);
+            Categoria novaCategoria = categoriaService.salvarCategoria(categoriaDTO);
             return new ResponseEntity<>(novaCategoria, HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
