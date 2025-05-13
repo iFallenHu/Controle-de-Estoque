@@ -1,19 +1,10 @@
     package br.com.techsolucoes.ControleEstoque.DTO;
 
-    import lombok.Data;
+    public class FornecedorResponseDTO {
 
-    @Data
-    public class FornecedorRequestDTO {
-
-
+        private Long id;
         private String Nome;
-
-
         private String Cnpj;
-
-
         private String Telefone;
-
-
         private String Email;
     }

@@ -1,24 +1,33 @@
 package br.com.techsolucoes.ControleEstoque.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@Table(name = "fornecedor")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Fornecedor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nome;
 
-    private String cnpj;
+    @Column(length = 100, nullable = false)
+    private String Nome;
 
-    private String telefone;
+    @Column(length = 18, nullable = false, unique = true) // formato 00.000.000/0000-00
+    private String Cnpj;
 
-    private String email;
+    @Column(length = 20, nullable = false)
+    private String Telefone;
+
+    @Column(length = 100, nullable = false, unique = true)
+    private String Email;
 }

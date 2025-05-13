@@ -1,7 +1,9 @@
-package br.com.techsolucoes.ControleEstoque.repository;
+    package br.com.techsolucoes.ControleEstoque.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+    import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface FornecedorRepository extends JpaRepository {
+    public interface FornecedorRepository extends JpaRepository {
 
-}
+        boolean existsByCnpj(String cnpj);
+        boolean existsByEmail(String email);
+    }
