@@ -1,4 +1,4 @@
-package br.com.techsolucoes.ControleEstoque.dto;
+package br.com.techsolucoes.ControleEstoque.DTO;
 
 import br.com.techsolucoes.ControleEstoque.entity.Perfil;
 import lombok.AllArgsConstructor;
