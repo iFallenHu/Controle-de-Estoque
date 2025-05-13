@@ -22,10 +22,10 @@
            }
 
             Fornecedor fornecedor = Fornecedor.builder()
-                    .Nome(fornecedorRequestDTO.getNome())
-                    .Cnpj(fornecedorRequestDTO.getCnpj())
-                    .Telefone(fornecedorRequestDTO.getTelefone())
-                    .Email(fornecedorRequestDTO.getEmail())
+                    .nome(fornecedorRequestDTO.getNome())
+                    .cnpj(fornecedorRequestDTO.getCnpj())
+                    .telefone(fornecedorRequestDTO.getTelefone())
+                    .email(fornecedorRequestDTO.getEmail())
                     .build();
 
            fornecedorRepository.save(fornecedor);

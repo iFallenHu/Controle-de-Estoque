@@ -20,14 +20,14 @@ public class Fornecedor {
 
 
     @Column(length = 100, nullable = false)
-    private String Nome;
+    private String nome;
 
     @Column(length = 18, nullable = false, unique = true) // formato 00.000.000/0000-00
-    private String Cnpj;
+    private String cnpj;
 
     @Column(length = 20, nullable = false)
-    private String Telefone;
+    private String telefone;
 
     @Column(length = 100, nullable = false, unique = true)
-    private String Email;
+    private String email;
 }

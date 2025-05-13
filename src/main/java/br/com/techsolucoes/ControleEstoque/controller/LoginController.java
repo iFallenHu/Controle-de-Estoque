@@ -22,7 +22,7 @@ public class LoginController {
     private final JwtUtil jwtUtil;
 
     @PostMapping
-    public ResponseEntity<?> login(@RequestBody br.com.techsolucoes.ControleEstoque.dto.UsuarioLoginDTO loginDTO) {
+    public ResponseEntity<?> login(@RequestBody br.com.techsolucoes.ControleEstoque.DTO.UsuarioLoginDTO loginDTO) {
         boolean autenticado = usuarioService.autenticar(loginDTO.getEmail(), loginDTO.getSenha());
         if (autenticado) {
             String token = jwtUtil.generateToken(loginDTO.getEmail());
