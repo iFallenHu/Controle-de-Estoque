@@ -1,215 +1,209 @@
-package br.com.techsolucoes.ControleEstoque.service;
+    package br.com.techsolucoes.ControleEstoque.service;
 
-import br.com.techsolucoes.ControleEstoque.DTO.CategoriaDTO;
-import br.com.techsolucoes.ControleEstoque.entity.Categoria;
-import br.com.techsolucoes.ControleEstoque.repository.CategoriaRepository;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+    import br.com.techsolucoes.ControleEstoque.DTO.CategoriaDTO;
+    import br.com.techsolucoes.ControleEstoque.entity.Categoria;
+    import br.com.techsolucoes.ControleEstoque.repository.CategoriaRepository;
+    import org.junit.jupiter.api.Test;
+    import org.junit.jupiter.api.extension.ExtendWith;
+    import org.mockito.InjectMocks;
+    import org.mockito.Mock;
+    import org.mockito.Mockito;
+    import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+    import java.util.Arrays;
+    import java.util.Collections;
+    import java.util.List;
+    import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+    import static org.junit.jupiter.api.Assertions.*;
+    import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-public class CategoriaServiceTest {
+    @ExtendWith(MockitoExtension.class)
+    public class CategoriaServiceTest {
 
-    @Mock
-    private CategoriaRepository categoriaRepository;
+        @Mock
+        private CategoriaRepository categoriaRepository;
 
-    @InjectMocks
-    private CategoriaService categoriaService;
+        @InjectMocks
+        private CategoriaService categoriaService;
 
-    @Test
-    void deveRetornarCategoriaQuandoIdExistir() {
+        @Test
+        void deveRetornarCategoriaQuandoIdExistir() {
 
-        //Arrange
-        Long id = 1L;
+            //Arrange
+            Long id = 1L;
 
-        Categoria categoriaMock = new Categoria();
-        categoriaMock.setId(id);
-        categoriaMock.setNome("Eletrônicos");
+            Categoria categoriaMock = new Categoria();
+            categoriaMock.setId(id);
+            categoriaMock.setNome("Eletrônicos");
 
-        when(categoriaRepository.findById(id))
-                .thenReturn(Optional.of(categoriaMock));
+            when(categoriaRepository.findById(id))
+                    .thenReturn(Optional.of(categoriaMock));
 
-        // Act
-        Categoria resultado = categoriaService.buscarPorId(id);
+            // Act
+            Categoria resultado = categoriaService.buscarPorId(id);
 
-        // Assert
-        assertNotNull(resultado);
-        assertEquals("Eletrônicos", resultado.getNome());
-        assertEquals(id, resultado.getId());
-    }
+            // Assert
+            assertNotNull(resultado);
+            assertEquals("Eletrônicos", resultado.getNome());
+            assertEquals(id, resultado.getId());
+        }
 
-    @Test
-    void deveLancarExcecaoQuandoIdNaoExistir() {
-        // Arrange
-        Long id = 999L;
-        when(categoriaRepository.findById(id))
-                .thenReturn(Optional.empty());
+        @Test
+        void deveLancarExcecaoQuandoIdNaoExistir() {
+            // Arrange
+            Long id = 999L;
+            when(categoriaRepository.findById(id))
+                    .thenReturn(Optional.empty());
 
-        // Act & Assert
-        assertThrows(RuntimeException.class, () -> {
-            categoriaService.buscarPorId(id);
-        });
-    }
+            // Act & Assert
+            assertThrows(RuntimeException.class, () -> {
+                categoriaService.buscarPorId(id);
+            });
+        }
 
-    @Test
-    void deveSalvarCategoriaComSucesso(){
+        @Test
+        void deveSalvarCategoriaComSucesso() {
+            // Arrange
+            CategoriaDTO novaCategoria = new CategoriaDTO();
+            novaCategoria.setNome("Informática");
 
-        //Arrange
-        Categoria novaCategoria = new Categoria();
-        novaCategoria.setNome("Informática");
+            Categoria categoriaSalva = new Categoria();
+            categoriaSalva.setId(1L);
+            categoriaSalva.setNome("Informática");
 
-        Categoria categoriaSalva = new Categoria();
-        categoriaSalva.setId(1L);
-        categoriaSalva.setNome("Informática");
+            when(categoriaRepository.save(any(Categoria.class)))
+                    .thenReturn(categoriaSalva);
 
-        when(categoriaRepository.save(novaCategoria))
-                .thenReturn(categoriaSalva);
+            // Act
+            Categoria resultado = categoriaService.salvarCategoria(novaCategoria);
 
+            // Assert
+            assertNotNull(resultado);
+            assertEquals("Informática", resultado.getNome());
+        }
+        @Test
+        void deveLancarExcecaoQuandoCategoriaForNull(){
+            assertThrows(IllegalArgumentException.class, () -> {
+               categoriaService.salvarCategoria(null);
+            });
 
-        //Act
+        }
 
-        Categoria resultado = categoriaService.salvarCategoria(novaCategoria);
+        @Test
+        void deveListarCategoriasComSucesso(){
+            //Arrange
+            Categoria cat1 = new Categoria();
+            cat1.setId(1L);
+            cat1.setNome("Informática");
 
-        //Assert
+            Categoria cat2 =new Categoria();
+            cat2.setId(2L);
+            cat2.setNome("Alimentos");
 
-        assertNotNull(resultado);
-        assertEquals(1L, resultado.getId());
-        assertEquals("Informática", resultado.getNome());
-    }
+            List<Categoria> categorias = Arrays.asList(cat1, cat2);
 
-    @Test
-    void deveLancarExcecaoQuandoCategoriaForNull(){
-        assertThrows(IllegalArgumentException.class, () -> {
-           categoriaService.salvarCategoria(null);
-        });
+            when(categoriaRepository.findAll()).thenReturn(categorias);
 
-    }
+            //Act
+            List<Categoria> resultado = categoriaService.listarCategoria();
 
-    @Test
-    void deveListarCategoriasComSucesso(){
-        //Arrange
-        Categoria cat1 = new Categoria();
-        cat1.setId(1L);
-        cat1.setNome("Informática");
+            //Assert
+            assertNotNull(resultado);
+            assertEquals(2,resultado.size());
+            assertEquals("Informática", resultado.get(0).getNome());
+            assertEquals("Alimentos", resultado.get(1).getNome());
+        }
 
-        Categoria cat2 =new Categoria();
-        cat2.setId(2L);
-        cat2.setNome("Alimentos");
+        @Test
+        void deveLancarExcecaoQuandoNaoExistiremCategorias(){
+            //Arrange
+            when(categoriaRepository.findAll()).thenReturn(Collections.emptyList());
 
-        List<Categoria> categorias = Arrays.asList(cat1, cat2);
+            //Act & Assert
+            assertThrows(IllegalStateException.class, () -> categoriaService.listarCategoria());
+        }
 
-        when(categoriaRepository.findAll()).thenReturn(categorias);
+        @Test
+        void deveAtualizarCategoriasComSucesso(){
+            // Arrange
+            long id = 1L;
+            Categoria categoriaExistente = new Categoria();
+            categoriaExistente.setId(id);
+            categoriaExistente.setNome("Antigo Nome");
 
-        //Act
-        List<Categoria> resultado = categoriaService.listarCategoria();
+            CategoriaDTO dto = new CategoriaDTO();
+            dto.setNome("Novo Nome");
 
-        //Assert
-        assertNotNull(resultado);
-        assertEquals(2,resultado.size());
-        assertEquals("Informática", resultado.get(0).getNome());
-        assertEquals("Alimentos", resultado.get(1).getNome());
-    }
-
-    @Test
-    void deveLancarExcecaoQuandoNaoExistiremCategorias(){
-        //Arrange
-        when(categoriaRepository.findAll()).thenReturn(Collections.emptyList());
-
-        //Act & Assert
-        assertThrows(IllegalStateException.class, () -> categoriaService.listarCategoria());
-    }
-
-    @Test
-    void deveAtualizarCategoriasComSucesso(){
-        // Arrange
-        long id = 1L;
-        Categoria categoriaExistente = new Categoria();
-        categoriaExistente.setId(id);
-        categoriaExistente.setNome("Antigo Nome");
-
-        CategoriaDTO dto = new CategoriaDTO();
-        dto.setNome("Novo Nome");
-
-        when(categoriaRepository.findById(id)).thenReturn(Optional.of(categoriaExistente));
-        when(categoriaRepository.save(Mockito.<Categoria>any())).thenAnswer(invocation -> invocation.getArgument(0));
+            when(categoriaRepository.findById(id)).thenReturn(Optional.of(categoriaExistente));
+            when(categoriaRepository.save(Mockito.<Categoria>any())).thenAnswer(invocation -> invocation.getArgument(0));
 
 
-        // Act
-        Categoria categoriaAtualizada = categoriaService.atualizarCategoria(id, dto);
+            // Act
+            Categoria categoriaAtualizada = categoriaService.atualizarCategoria(id, dto);
 
-        // Assert
-        assertNotNull(categoriaAtualizada);
-        assertEquals("Novo Nome", categoriaAtualizada.getNome());
-        verify(categoriaRepository).findById(id);
-        verify(categoriaRepository).save(categoriaExistente);
-    }
+            // Assert
+            assertNotNull(categoriaAtualizada);
+            assertEquals("Novo Nome", categoriaAtualizada.getNome());
+            verify(categoriaRepository).findById(id);
+            verify(categoriaRepository).save(categoriaExistente);
+        }
 
-    @Test
-    void DeveLancarexcecaoQuandoNaoAtualizar(){
-        // Arrange
-        long id = 1L;
-        CategoriaDTO dto = new CategoriaDTO();
-        dto.setNome("Qualquer Nome");
+        @Test
+        void DeveLancarexcecaoQuandoNaoAtualizar(){
+            // Arrange
+            long id = 1L;
+            CategoriaDTO dto = new CategoriaDTO();
+            dto.setNome("Qualquer Nome");
 
-        when(categoriaRepository.findById(id)).thenReturn(Optional.empty());
+            when(categoriaRepository.findById(id)).thenReturn(Optional.empty());
 
-        // Act
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            categoriaService.atualizarCategoria(id, dto);
-        });
+            // Act
+            RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+                categoriaService.atualizarCategoria(id, dto);
+            });
 
-        //Assert
-        assertEquals("Categoria não encontrada", exception.getMessage());
-        verify(categoriaRepository).findById(id);
-        verify(categoriaRepository, never()).save(Mockito.<Categoria>any());
-    }
+            //Assert
+            assertEquals("Categoria não encontrada", exception.getMessage());
+            verify(categoriaRepository).findById(id);
+            verify(categoriaRepository, never()).save(Mockito.<Categoria>any());
+        }
 
-    @Test
-    void DeveDeletarCategoriasComSucesso(){
+        @Test
+        void DeveDeletarCategoriasComSucesso(){
 
-        //Arrange
-        Long id = 1L;
-        Categoria categoriaExistente = new Categoria();
-        categoriaExistente.setId(id);
-        categoriaExistente.setNome("Categoria Teste");
+            //Arrange
+            Long id = 1L;
+            Categoria categoriaExistente = new Categoria();
+            categoriaExistente.setId(id);
+            categoriaExistente.setNome("Categoria Teste");
 
-        when(categoriaRepository.findById(id)).thenReturn(Optional.of(categoriaExistente));
+            when(categoriaRepository.findById(id)).thenReturn(Optional.of(categoriaExistente));
 
-        //Act
-        categoriaService.deletarCategoria(id);
-
-        //Assert
-        verify(categoriaRepository).findById(id);
-        verify(categoriaRepository).deleteById(id);
-    }
-
-    @Test
-    void DeveLancarExcecaoQuandoNaoEncontrarCategoria(){
-
-        //Arrange
-        Long id = 1L;
-        when(categoriaRepository.findById(id)).thenReturn(Optional.empty());
-
-        //Act
-        RuntimeException exception = assertThrows(RuntimeException.class, () ->{
+            //Act
             categoriaService.deletarCategoria(id);
-        });
 
-        //Assert
-        assertEquals("Categoria não encontrada", exception.getMessage());
-        verify(categoriaRepository).findById(id);
-        verify(categoriaRepository, never()).delete(Mockito.<Categoria>any());
+            //Assert
+            verify(categoriaRepository).findById(id);
+            verify(categoriaRepository).deleteById(id);
+        }
 
+        @Test
+        void DeveLancarExcecaoQuandoNaoEncontrarCategoria(){
+
+            //Arrange
+            Long id = 1L;
+            when(categoriaRepository.findById(id)).thenReturn(Optional.empty());
+
+            //Act
+            RuntimeException exception = assertThrows(RuntimeException.class, () ->{
+                categoriaService.deletarCategoria(id);
+            });
+
+            //Assert
+            assertEquals("Categoria não encontrada", exception.getMessage());
+            verify(categoriaRepository).findById(id);
+            verify(categoriaRepository, never()).delete(Mockito.<Categoria>any());
+
+        }
     }
-}

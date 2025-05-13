@@ -1,7 +1,6 @@
 package br.com.techsolucoes.ControleEstoque.controller;
 
-import br.com.techsolucoes.ControleEstoque.dto.UsuarioDTO;
-import br.com.techsolucoes.ControleEstoque.dto.UsuarioLoginDTO;
+import br.com.techsolucoes.ControleEstoque.DTO.UsuarioDTO;
 import br.com.techsolucoes.ControleEstoque.entity.Usuario;
 import br.com.techsolucoes.ControleEstoque.service.UsuarioService;
 import br.com.techsolucoes.ControleEstoque.util.JwtUtil;
@@ -23,7 +22,7 @@ public class LoginController {
     private final JwtUtil jwtUtil;
 
     @PostMapping
-    public ResponseEntity<?> login(@RequestBody UsuarioLoginDTO loginDTO) {
+    public ResponseEntity<?> login(@RequestBody br.com.techsolucoes.ControleEstoque.dto.UsuarioLoginDTO loginDTO) {
         boolean autenticado = usuarioService.autenticar(loginDTO.getEmail(), loginDTO.getSenha());
         if (autenticado) {
             String token = jwtUtil.generateToken(loginDTO.getEmail());
