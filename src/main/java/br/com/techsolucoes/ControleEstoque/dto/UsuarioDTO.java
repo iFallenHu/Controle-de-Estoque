@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 public class UsuarioDTO {
     private String nome;
     private String email;
-    private String senha;
+    private String senha; //Ponto de melhoria
     private Perfil perfil;
 }
