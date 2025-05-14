@@ -1,4 +1,4 @@
-package br.com.techsolucoes.ControleEstoque.dto;
+package br.com.techsolucoes.ControleEstoque.DTO;
 
 import br.com.techsolucoes.ControleEstoque.entity.Perfil;
 import lombok.AllArgsConstructor;
@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 public class UsuarioDTO {
     private String nome;
     private String email;
-    private String senha;
+    private String senha; //Ponto de melhoria
     private Perfil perfil;
 }
