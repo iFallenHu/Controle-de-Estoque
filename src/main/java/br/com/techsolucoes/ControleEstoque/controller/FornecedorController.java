@@ -28,7 +28,7 @@ public class FornecedorController {
     @GetMapping
     public ResponseEntity<List<Fornecedor>> listarFornecedor() {
         try {
-            return ResponseEntity.ok(fornecedorService.listarFornecedor());
+            return ResponseEntity.ok(fornecedorService.listar());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -37,7 +37,7 @@ public class FornecedorController {
     @GetMapping("/{id}")
     public ResponseEntity<Fornecedor> buscarPorId(@PathVariable long id) {
         try {
-            Fornecedor fornecedor = fornecedorService.buscarPorId(id);
+            Fornecedor fornecedor = fornecedorService.buscar(id);
             return ResponseEntity.ok(fornecedor);
         } catch (CategoriaNotFoundException e) {
             return ResponseEntity.notFound().build();
@@ -47,7 +47,7 @@ public class FornecedorController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarFornecedor(@PathVariable long id) {
         try {
-            fornecedorService.deletarFornecedor(id);
+            fornecedorService.deletar(id);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (CategoriaNotFoundException e) {
             return ResponseEntity.noContent().build(); //Retorna 204
@@ -57,7 +57,7 @@ public class FornecedorController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Fornecedor> atualizarFornecedor(@PathVariable long id, @RequestBody FornecedorRequestDTO fornecedorRequestDTO) {
-        Fornecedor fornecedorAtualizado = fornecedorService.atualizarFornecedor(id, fornecedorRequestDTO);
+        Fornecedor fornecedorAtualizado = fornecedorService.atualizar(id, fornecedorRequestDTO);
         return ResponseEntity.ok(fornecedorAtualizado);
     }
 
