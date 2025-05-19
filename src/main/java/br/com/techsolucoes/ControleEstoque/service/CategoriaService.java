@@ -43,7 +43,7 @@ public class CategoriaService {
         Categoria categoria = categoriaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
 
-        categoriaRepository.deleteById(id);
+        categoriaRepository.deleteById(categoria.getId());
     }
 
     public Categoria atualizarCategoria(long id, CategoriaDTO dto) {
