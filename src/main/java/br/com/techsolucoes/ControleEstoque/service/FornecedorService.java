@@ -21,7 +21,7 @@ public class FornecedorService {
         }
 
         if (fornecedorRepository.existsByEmail(fornecedorRequestDTO.getEmail())) {
-            throw new RuntimeException("E-mail á cadastrado.");
+            throw new RuntimeException("E-mail já cadastrado.");
         }
 
         Fornecedor fornecedor = Fornecedor.builder()
@@ -34,7 +34,7 @@ public class FornecedorService {
         fornecedorRepository.save(fornecedor);
     }
 
-    public List<Fornecedor> listarFornecedor() {
+    public List<Fornecedor> listar() {
         List<Fornecedor> fornecedor = fornecedorRepository.findAll();
         if (fornecedor.isEmpty()) {
             throw new IllegalStateException("Nenhuma categoria encontrada.");
@@ -42,19 +42,19 @@ public class FornecedorService {
         return fornecedor;
     }
 
-    public Fornecedor buscarPorId(long id) {
+    public Fornecedor buscar(long id) {
         return fornecedorRepository.findById(id)
                 .orElseThrow(() -> new CategoriaNotFoundException("Categoria com ID" + id + "Não encontrada"));
     }
 
-    public void deletarFornecedor(long id) {
+    public void deletar(long id) {
         Fornecedor fornecedor = fornecedorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Fornecedor não encontrado"));
 
-        fornecedorRepository.deleteById(id);
+        fornecedorRepository.deleteById(fornecedor.getId());
     }
 
-    public Fornecedor atualizarFornecedor(long id, FornecedorRequestDTO fornecedorRequestDTO) {
+    public Fornecedor atualizar(long id, FornecedorRequestDTO fornecedorRequestDTO) {
         Fornecedor fornecedor = fornecedorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
 
