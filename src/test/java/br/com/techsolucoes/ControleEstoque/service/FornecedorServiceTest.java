@@ -11,9 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-
 import java.util.List;
-
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -29,8 +27,6 @@ public class FornecedorServiceTest {
 
     @Mock
     private FornecedorMapper fornecedorMapper;
-
-    // Usa o mapper real
 
 
     @Test
