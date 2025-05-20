@@ -6,14 +6,14 @@
     public class FornecedorRequestDTO {
 
 
-        private String Nome;
+        private String nome;
 
 
-        private String Cnpj;
+        private String cnpj;
 
 
-        private String Telefone;
+        private String telefone;
 
 
-        private String Email;
+        private String email;
     }

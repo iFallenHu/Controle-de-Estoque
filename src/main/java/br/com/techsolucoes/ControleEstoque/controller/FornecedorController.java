@@ -1,6 +1,7 @@
 package br.com.techsolucoes.ControleEstoque.controller;
 
 import br.com.techsolucoes.ControleEstoque.DTO.FornecedorRequestDTO;
+import br.com.techsolucoes.ControleEstoque.DTO.FornecedorResponseDTO;
 import br.com.techsolucoes.ControleEstoque.entity.Fornecedor;
 import br.com.techsolucoes.ControleEstoque.exception.CategoriaNotFoundException;
 import br.com.techsolucoes.ControleEstoque.service.FornecedorService;
@@ -26,16 +27,17 @@ public class FornecedorController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Fornecedor>> listarFornecedor() {
+    public ResponseEntity<List<FornecedorResponseDTO>> listar() {
         try {
-            return ResponseEntity.ok(fornecedorService.listar());
+            List<FornecedorResponseDTO> fornecedores = fornecedorService.listar();
+            return ResponseEntity.ok(fornecedores);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Fornecedor> buscarPorId(@PathVariable long id) {
+    public ResponseEntity<Fornecedor> buscar(@PathVariable long id) {
         try {
             Fornecedor fornecedor = fornecedorService.buscar(id);
             return ResponseEntity.ok(fornecedor);
@@ -45,7 +47,7 @@ public class FornecedorController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarFornecedor(@PathVariable long id) {
+    public ResponseEntity<Void> deletar(@PathVariable long id) {
         try {
             fornecedorService.deletar(id);
             return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -56,7 +58,7 @@ public class FornecedorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Fornecedor> atualizarFornecedor(@PathVariable long id, @RequestBody FornecedorRequestDTO fornecedorRequestDTO) {
+    public ResponseEntity<Fornecedor> atualizar(@PathVariable long id, @RequestBody FornecedorRequestDTO fornecedorRequestDTO) {
         Fornecedor fornecedorAtualizado = fornecedorService.atualizar(id, fornecedorRequestDTO);
         return ResponseEntity.ok(fornecedorAtualizado);
     }
