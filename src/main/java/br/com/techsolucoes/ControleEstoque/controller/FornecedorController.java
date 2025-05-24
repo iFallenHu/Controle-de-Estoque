@@ -5,6 +5,7 @@ import br.com.techsolucoes.ControleEstoque.DTO.FornecedorResponseDTO;
 import br.com.techsolucoes.ControleEstoque.entity.Fornecedor;
 import br.com.techsolucoes.ControleEstoque.exception.CategoriaNotFoundException;
 import br.com.techsolucoes.ControleEstoque.service.FornecedorService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,8 @@ public class FornecedorController {
 
     private final FornecedorService fornecedorService;
 
-    @PostMapping
+    @Operation(summary = "cadastro de fornecedor", description = "Efetua o cadastro de uma Empresa.")
+    @PostMapping("/register")
     public ResponseEntity<Void> cadastrar(@RequestBody @Validated FornecedorRequestDTO fornecedorRequestDTO) {
         fornecedorService.cadastrar(fornecedorRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
