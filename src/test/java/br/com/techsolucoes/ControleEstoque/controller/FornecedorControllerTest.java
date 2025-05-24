@@ -60,6 +60,7 @@ public class FornecedorControllerTest {
         assertEquals(2, response.getBody().size());
         verify(fornecedorService, times(1)).listar();
     }
+
     @Test
     void deveRetornarFornecedorPorIdComSucesso() {
         // Arrange

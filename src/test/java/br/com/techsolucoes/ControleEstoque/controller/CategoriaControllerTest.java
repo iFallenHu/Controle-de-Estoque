@@ -1,39 +1,39 @@
 package br.com.techsolucoes.ControleEstoque.controller;
 
-    import br.com.techsolucoes.ControleEstoque.DTO.CategoriaDTO;
-    import br.com.techsolucoes.ControleEstoque.exception.CategoriaNotFoundException;
-    import br.com.techsolucoes.ControleEstoque.entity.Categoria;
-    import br.com.techsolucoes.ControleEstoque.service.CategoriaService;
-    import org.junit.jupiter.api.Test;
-    import org.junit.jupiter.api.extension.ExtendWith;
-    import org.mockito.InjectMocks;
-    import org.mockito.Mock;
-    import org.mockito.junit.jupiter.MockitoExtension;
-    import org.springframework.http.HttpStatus;
-    import org.springframework.http.ResponseEntity;
+import br.com.techsolucoes.ControleEstoque.DTO.CategoriaDTO;
+import br.com.techsolucoes.ControleEstoque.exception.CategoriaNotFoundException;
+import br.com.techsolucoes.ControleEstoque.entity.Categoria;
+import br.com.techsolucoes.ControleEstoque.service.CategoriaService;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-    import java.util.Arrays;
-    import java.util.List;
+import java.util.Arrays;
+import java.util.List;
 
-    import static org.junit.jupiter.api.Assertions.*;
-    import static org.mockito.ArgumentMatchers.any;
-    import static org.mockito.ArgumentMatchers.eq;
-    import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
-    @ExtendWith(MockitoExtension.class)
-    public class CategoriaControllerTest {
+@ExtendWith(MockitoExtension.class)
+public class CategoriaControllerTest {
 
-        @Mock
-        private CategoriaService categoriaService;
+    @Mock
+    private CategoriaService categoriaService;
 
-        @InjectMocks
-        private CategoriaController categoriaController;
+    @InjectMocks
+    private CategoriaController categoriaController;
 
-        @Test
-        void deveCriarCategoriaERetornar201() {
+    @Test
+    void deveCriarCategoriaERetornar201() {
 
-            Categoria categoria = new Categoria();
-            categoria.setNome("Tecnologia");
+        Categoria categoria = new Categoria();
+        categoria.setNome("Tecnologia");
         //Arrange
         CategoriaDTO categoriaDTO = new CategoriaDTO();
         categoriaDTO.setNome("Tecnologia");
@@ -196,6 +196,7 @@ package br.com.techsolucoes.ControleEstoque.controller;
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         assertNull(response.getBody());
     }
+
     @Test
     void deveRetornarErro500QuandoDelecaoFalhar() {
         Long id = 1L;
@@ -208,7 +209,6 @@ package br.com.techsolucoes.ControleEstoque.controller;
             categoriaController.deletarCategoria(id);
         });
     }
-
 
 
 }
