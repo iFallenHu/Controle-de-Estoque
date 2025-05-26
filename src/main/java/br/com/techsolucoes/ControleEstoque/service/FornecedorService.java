@@ -45,19 +45,19 @@ public class FornecedorService {
         return fornecedorMapper.toDTOList(fornecedores);
     }
 
-    public Fornecedor buscar(long id) {
+    public Fornecedor buscar(Long id) {
         return fornecedorRepository.findById(id)
                 .orElseThrow(() -> new CategoriaNotFoundException("Fornecedor com ID" + id + "Não encontrada"));
     }
 
-    public void deletar(long id) {
+    public void deletar(Long id) {
         Fornecedor fornecedor = fornecedorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Fornecedor não encontrado"));
 
         fornecedorRepository.deleteById(fornecedor.getId());
     }
 
-    public Fornecedor atualizar(long id, FornecedorRequestDTO fornecedorRequestDTO) {
+    public Fornecedor atualizar(Long id, FornecedorRequestDTO fornecedorRequestDTO) {
         Fornecedor fornecedor = fornecedorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Fornecedor não encontrada"));
 

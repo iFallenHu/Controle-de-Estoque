@@ -64,7 +64,7 @@ public class FornecedorControllerTest {
     @Test
     void deveRetornarFornecedorPorIdComSucesso() {
         // Arrange
-        long id = 1L;
+        Long id = 1L;
         Fornecedor fornecedor = new Fornecedor();
         when(fornecedorService.buscar(id)).thenReturn(fornecedor);
 
@@ -80,7 +80,7 @@ public class FornecedorControllerTest {
     @Test
     void deveRetornarNotFoundQuandoFornecedorNaoExiste() {
         // Arrange
-        long id = 1L;
+        Long id = 1L;
         when(fornecedorService.buscar(id)).thenThrow(new CategoriaNotFoundException("Fornecedor não encontrado"));
 
         // Act
@@ -94,7 +94,7 @@ public class FornecedorControllerTest {
     @Test
     void deveDeletarFornecedorComSucesso() {
         // Arrange
-        long id = 1L;
+        Long id = 1L;
 
         // Act
         ResponseEntity<Void> response = fornecedorController.deletar(id);
@@ -107,7 +107,7 @@ public class FornecedorControllerTest {
     @Test
     void deveRetornarNoContentQuandoFornecedorNaoEncontradoParaDelecao() {
         // Arrange
-        long id = 1L;
+        Long id = 1L;
         doThrow(new CategoriaNotFoundException("Fornecedor não encontrado")).when(fornecedorService).deletar(id);
 
         // Act
@@ -121,7 +121,7 @@ public class FornecedorControllerTest {
     @Test
     void deveAtualizarFornecedorComSucesso() {
         // Arrange
-        long id = 1L;
+        Long id = 1L;
         FornecedorRequestDTO dto = new FornecedorRequestDTO();
         Fornecedor fornecedorAtualizado = new Fornecedor();
 
