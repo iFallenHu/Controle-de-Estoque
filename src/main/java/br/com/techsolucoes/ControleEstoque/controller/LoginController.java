@@ -1,22 +1,20 @@
 package br.com.techsolucoes.ControleEstoque.controller;
 
-import br.com.techsolucoes.ControleEstoque.DTO.UsuarioDTO;
 import br.com.techsolucoes.ControleEstoque.DTO.UsuarioLoginDTO;
-import br.com.techsolucoes.ControleEstoque.entity.Usuario;
+import br.com.techsolucoes.ControleEstoque.DTO.UsuarioRequestDTO;
+import br.com.techsolucoes.ControleEstoque.DTO.UsuarioResponseDTO;
 import br.com.techsolucoes.ControleEstoque.security.jwt.JwtService;
 import br.com.techsolucoes.ControleEstoque.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
-
 @RestController
-@RequestMapping("/login")
 @RequiredArgsConstructor
 public class LoginController {
 
@@ -24,7 +22,7 @@ public class LoginController {
     private final JwtService jwtService;
 
     @Operation(summary = "Login de usuários", description = "Retorna um token JWT caso o login tenha sucesso.")
-    @PostMapping
+    @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UsuarioLoginDTO loginDTO) {
         boolean autenticado = usuarioService.autenticar2(loginDTO.getEmail(), loginDTO.getSenha()); //JwtService
         if (autenticado) {
@@ -39,21 +37,14 @@ public class LoginController {
 
 
     @Operation(summary = "Registrar um novo usuário", description = "Retorna o novo usuário cadastrado.")
+//    @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso",
+//            content = @Content(mediaType = "application/json",
+//                    schema = @Schema(implementation = UsuarioResponseDTO.class)))
     @PostMapping("/register")
-    public ResponseEntity<?> cadastrarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
-        Optional<Usuario> existente = usuarioService.buscarPorEmail(usuarioDTO.getEmail());
-        if (existente.isPresent()) {
-            return ResponseEntity.status(400).body("{\"erro\": \"Email já cadastrado.\"}");
-        }
+    public ResponseEntity<UsuarioResponseDTO> cadastrarUsuario(@Valid @RequestBody UsuarioRequestDTO usuarioRequestDTO) {
+        usuarioService.verificarEmailDuplicado(usuarioRequestDTO.getEmail());
 
-        Usuario novo = Usuario.builder()
-                .nome(usuarioDTO.getNome())
-                .email(usuarioDTO.getEmail())
-                .senha(usuarioDTO.getSenha()) // (ideal: usar BCrypt aqui)
-                .perfil(usuarioDTO.getPerfil())
-                .build();
-
-        Usuario salvo = usuarioService.salvar(novo);
-        return ResponseEntity.ok(salvo);
+        UsuarioResponseDTO responseDTO = usuarioService.salvar(usuarioRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 }
