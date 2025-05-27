@@ -8,10 +8,10 @@ import br.com.techsolucoes.ControleEstoque.service.FornecedorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class FornecedorController {
 
     @Operation(summary = "cadastro de fornecedor", description = "Efetua o cadastro de uma Empresa.")
     @PostMapping
-    public ResponseEntity<Void> cadastrar(@RequestBody @Validated FornecedorRequestDTO fornecedorRequestDTO) {
+    public ResponseEntity<Void> cadastrar(@RequestBody @Valid FornecedorRequestDTO fornecedorRequestDTO) {
         fornecedorService.cadastrar(fornecedorRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
