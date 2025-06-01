@@ -58,12 +58,8 @@ public class FornecedorController {
     @Operation(summary = "Deletar fornecedor", description = "Remove um fornecedor do sistema com base no ID informado.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        try {
-            fornecedorService.deletar(id);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.noContent().build();
-        }
+        fornecedorService.deletar(id);
+        return ResponseEntity.noContent().build();
 
     }
 
