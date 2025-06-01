@@ -1,7 +1,7 @@
 package br.com.techsolucoes.ControleEstoque.controller;
 
 import br.com.techsolucoes.ControleEstoque.DTO.CategoriaDTO;
-import br.com.techsolucoes.ControleEstoque.exception.CategoriaNotFoundException;
+import br.com.techsolucoes.ControleEstoque.exception.ResourceNotFoundException;
 import br.com.techsolucoes.ControleEstoque.entity.Categoria;
 import br.com.techsolucoes.ControleEstoque.service.CategoriaService;
 import org.junit.jupiter.api.Test;
@@ -95,7 +95,7 @@ public class CategoriaControllerTest {
         Long idInexistente = 99L;
 
         when(categoriaService.buscarPorId(idInexistente))
-                .thenThrow(new CategoriaNotFoundException("Categoria não encontrada"));
+                .thenThrow(new ResourceNotFoundException("Categoria não encontrada"));
 
         ResponseEntity<Categoria> response = categoriaController.buscarPorId(idInexistente);
 

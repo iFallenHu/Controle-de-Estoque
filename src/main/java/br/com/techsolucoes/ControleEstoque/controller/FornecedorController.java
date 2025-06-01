@@ -3,7 +3,7 @@ package br.com.techsolucoes.ControleEstoque.controller;
 import br.com.techsolucoes.ControleEstoque.DTO.FornecedorRequestDTO;
 import br.com.techsolucoes.ControleEstoque.DTO.FornecedorResponseDTO;
 import br.com.techsolucoes.ControleEstoque.entity.Fornecedor;
-import br.com.techsolucoes.ControleEstoque.exception.CategoriaNotFoundException;
+import br.com.techsolucoes.ControleEstoque.exception.ResourceNotFoundException;
 import br.com.techsolucoes.ControleEstoque.service.FornecedorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -46,23 +46,23 @@ public class FornecedorController {
             @ApiResponse(responseCode = "404", description = "Fornecedor não encontrado")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<Fornecedor> buscar(@PathVariable long id) {
+    public ResponseEntity<Fornecedor> buscar(@PathVariable Long id) {
         try {
             Fornecedor fornecedor = fornecedorService.buscar(id);
             return ResponseEntity.ok(fornecedor);
-        } catch (CategoriaNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @Operation(summary = "Deletar fornecedor", description = "Remove um fornecedor do sistema com base no ID informado.")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable long id) {
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
         try {
             fornecedorService.deletar(id);
             return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (CategoriaNotFoundException e) {
-            return ResponseEntity.noContent().build(); //Retorna 204
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.noContent().build();
         }
 
     }

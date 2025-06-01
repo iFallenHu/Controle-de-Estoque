@@ -3,25 +3,27 @@ package br.com.techsolucoes.ControleEstoque.service;
 import br.com.techsolucoes.ControleEstoque.DTO.FornecedorRequestDTO;
 import br.com.techsolucoes.ControleEstoque.DTO.FornecedorResponseDTO;
 import br.com.techsolucoes.ControleEstoque.entity.Fornecedor;
-import br.com.techsolucoes.ControleEstoque.exception.CategoriaNotFoundException;
+import br.com.techsolucoes.ControleEstoque.exception.ResourceNotFoundException;
 import br.com.techsolucoes.ControleEstoque.mapper.FornecedorMapper;
 import br.com.techsolucoes.ControleEstoque.repository.FornecedorRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 
 @Service
+@AllArgsConstructor
 public class FornecedorService {
 
     private final FornecedorRepository fornecedorRepository;
 
     private final FornecedorMapper fornecedorMapper;
 
-    public FornecedorService(FornecedorRepository fornecedorRepository, FornecedorMapper fornecedorMapper) {
-        this.fornecedorRepository = fornecedorRepository;
-        this.fornecedorMapper = fornecedorMapper;
-    }
+//    public FornecedorService(FornecedorRepository fornecedorRepository, FornecedorMapper fornecedorMapper) {
+//        this.fornecedorRepository = fornecedorRepository;
+//        this.fornecedorMapper = fornecedorMapper;
+//    }
 
     public void cadastrar(FornecedorRequestDTO fornecedorRequestDTO) {
         if (fornecedorRepository.existsByCnpj(fornecedorRequestDTO.getCnpj())) {
@@ -47,7 +49,7 @@ public class FornecedorService {
 
     public Fornecedor buscar(Long id) {
         return fornecedorRepository.findById(id)
-                .orElseThrow(() -> new CategoriaNotFoundException("Fornecedor com ID" + id + "Não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Fornecedor com ID" + id + "Não encontrada"));
     }
 
     public void deletar(Long id) {
