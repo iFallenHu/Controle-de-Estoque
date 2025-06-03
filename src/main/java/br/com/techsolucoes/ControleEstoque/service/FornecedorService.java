@@ -22,11 +22,11 @@ public class FornecedorService {
 
     public void cadastrar(FornecedorRequestDTO fornecedorRequestDTO) {
         if (fornecedorRepository.existsByCnpj(fornecedorRequestDTO.getCnpj())) {
-            throw new RuntimeException("CNPJ já cadastrado.");
+            throw new DuplicateResourceException("CNPJ já cadastrado.");
         }
 
         if (fornecedorRepository.existsByEmail(fornecedorRequestDTO.getEmail())) {
-            throw new RuntimeException("E-mail já cadastrado.");
+            throw new DuplicateResourceException("E-mail já cadastrado.");
         }
 
         fornecedorRepository.save(fornecedorMapper.toEntity(fornecedorRequestDTO));
@@ -44,7 +44,7 @@ public class FornecedorService {
 
     public Fornecedor buscar(Long id) {
         return fornecedorRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Fornecedor com ID" + id + "Não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Fornecedor com ID " + id + " Não encontrada"));
     }
 
     public void deletar(Long id) {
