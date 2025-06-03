@@ -3,7 +3,7 @@ package br.com.techsolucoes.ControleEstoque.controller;
 import br.com.techsolucoes.ControleEstoque.DTO.FornecedorRequestDTO;
 import br.com.techsolucoes.ControleEstoque.DTO.FornecedorResponseDTO;
 import br.com.techsolucoes.ControleEstoque.entity.Fornecedor;
-import br.com.techsolucoes.ControleEstoque.exception.CategoriaNotFoundException;
+import br.com.techsolucoes.ControleEstoque.exception.ResourceNotFoundException;
 import br.com.techsolucoes.ControleEstoque.mapper.FornecedorMapper;
 import br.com.techsolucoes.ControleEstoque.service.FornecedorService;
 import org.junit.jupiter.api.Test;
@@ -81,7 +81,7 @@ public class FornecedorControllerTest {
     void deveRetornarNotFoundQuandoFornecedorNaoExiste() {
         // Arrange
         Long id = 1L;
-        when(fornecedorService.buscar(id)).thenThrow(new CategoriaNotFoundException("Fornecedor não encontrado"));
+        when(fornecedorService.buscar(id)).thenThrow(new ResourceNotFoundException("Fornecedor não encontrado"));
 
         // Act
         ResponseEntity<Fornecedor> response = fornecedorController.buscar(id);
@@ -108,7 +108,7 @@ public class FornecedorControllerTest {
     void deveRetornarNoContentQuandoFornecedorNaoEncontradoParaDelecao() {
         // Arrange
         Long id = 1L;
-        doThrow(new CategoriaNotFoundException("Fornecedor não encontrado")).when(fornecedorService).deletar(id);
+        doThrow(new ResourceNotFoundException("Fornecedor não encontrado")).when(fornecedorService).deletar(id);
 
         // Act
         ResponseEntity<Void> response = fornecedorController.deletar(id);
