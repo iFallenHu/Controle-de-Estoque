@@ -1,7 +1,7 @@
 package br.com.techsolucoes.ControleEstoque.controller;
 
 import br.com.techsolucoes.ControleEstoque.DTO.CategoriaDTO;
-import br.com.techsolucoes.ControleEstoque.exception.CategoriaNotFoundException;
+import br.com.techsolucoes.ControleEstoque.exception.ResourceNotFoundException;
 import br.com.techsolucoes.ControleEstoque.entity.Categoria;
 import br.com.techsolucoes.ControleEstoque.service.CategoriaService;
 import org.springframework.http.HttpStatus;
@@ -54,7 +54,7 @@ public class CategoriaController {
         try {
             Categoria categoria = categoriaService.buscarPorId(id);
             return ResponseEntity.ok(categoria);
-        } catch (CategoriaNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -64,7 +64,7 @@ public class CategoriaController {
         try {
             categoriaService.deletarCategoria(id);
             return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (CategoriaNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.noContent().build(); //Retorna 204
         }
 

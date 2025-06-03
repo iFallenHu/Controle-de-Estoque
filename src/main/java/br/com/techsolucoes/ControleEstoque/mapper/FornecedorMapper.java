@@ -4,6 +4,7 @@ import br.com.techsolucoes.ControleEstoque.DTO.FornecedorRequestDTO;
 import br.com.techsolucoes.ControleEstoque.DTO.FornecedorResponseDTO;
 import br.com.techsolucoes.ControleEstoque.entity.Fornecedor;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
 
 import java.util.List;
@@ -20,6 +21,9 @@ public interface FornecedorMapper {
 
     // Lista de entidades para lista de DTOs
     List<FornecedorResponseDTO> toDTOList(List<Fornecedor> fornecedores);
+
+    // Atualiza os dados de uma entidade existente com os dados do DTO
+    void updateEntityFromDto(FornecedorRequestDTO dto, @MappingTarget Fornecedor fornecedor);
 }
 
 

@@ -3,33 +3,30 @@ package br.com.techsolucoes.ControleEstoque.service;
 import br.com.techsolucoes.ControleEstoque.DTO.FornecedorRequestDTO;
 import br.com.techsolucoes.ControleEstoque.DTO.FornecedorResponseDTO;
 import br.com.techsolucoes.ControleEstoque.entity.Fornecedor;
-import br.com.techsolucoes.ControleEstoque.exception.CategoriaNotFoundException;
+import br.com.techsolucoes.ControleEstoque.exception.DuplicateResourceException;
+import br.com.techsolucoes.ControleEstoque.exception.ResourceNotFoundException;
 import br.com.techsolucoes.ControleEstoque.mapper.FornecedorMapper;
 import br.com.techsolucoes.ControleEstoque.repository.FornecedorRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
 @Service
+@AllArgsConstructor
 public class FornecedorService {
 
     private final FornecedorRepository fornecedorRepository;
 
     private final FornecedorMapper fornecedorMapper;
 
-    public FornecedorService(FornecedorRepository fornecedorRepository, FornecedorMapper fornecedorMapper) {
-        this.fornecedorRepository = fornecedorRepository;
-        this.fornecedorMapper = fornecedorMapper;
-    }
-
     public void cadastrar(FornecedorRequestDTO fornecedorRequestDTO) {
         if (fornecedorRepository.existsByCnpj(fornecedorRequestDTO.getCnpj())) {
-            throw new RuntimeException("CNPJ já cadastrado.");
+            throw new DuplicateResourceException("CNPJ já cadastrado.");
         }
 
         if (fornecedorRepository.existsByEmail(fornecedorRequestDTO.getEmail())) {
-            throw new RuntimeException("E-mail já cadastrado.");
+            throw new DuplicateResourceException("E-mail já cadastrado.");
         }
 
         fornecedorRepository.save(fornecedorMapper.toEntity(fornecedorRequestDTO));
@@ -39,7 +36,7 @@ public class FornecedorService {
         List<Fornecedor> fornecedores = fornecedorRepository.findAll();
 
         if (fornecedores.isEmpty()) {
-            throw new IllegalStateException("Nenhum fornecedor encontrado.");
+            throw new ResourceNotFoundException("Nenhum fornecedor encontrado.");
         }
 
         return fornecedorMapper.toDTOList(fornecedores);
@@ -47,21 +44,33 @@ public class FornecedorService {
 
     public Fornecedor buscar(Long id) {
         return fornecedorRepository.findById(id)
-                .orElseThrow(() -> new CategoriaNotFoundException("Fornecedor com ID" + id + "Não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Fornecedor com ID " + id + " Não encontrada"));
     }
 
     public void deletar(Long id) {
         Fornecedor fornecedor = fornecedorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Fornecedor não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Fornecedor com ID " + id + " não encontrado."));
 
         fornecedorRepository.deleteById(fornecedor.getId());
     }
 
     public Fornecedor atualizar(Long id, FornecedorRequestDTO fornecedorRequestDTO) {
         Fornecedor fornecedor = fornecedorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Fornecedor não encontrada"));
+                .orElseThrow(() -> new RuntimeException("Fornecedor não encontrado"));
 
-        fornecedor.setNome(fornecedorRequestDTO.getNome());
+
+        if (fornecedorRepository.existsByCnpjAndIdNot(fornecedorRequestDTO.getCnpj(), id)) {
+            throw new DuplicateResourceException("CNPJ já cadastrado.");
+        }
+
+        if (fornecedorRepository.existsByEmailAndIdNot(fornecedorRequestDTO.getEmail(), id)) {
+            throw new DuplicateResourceException("E-mail já cadastrado.");
+        }
+
+        // Atualiza os dados usando o mapper
+        fornecedorMapper.updateEntityFromDto(fornecedorRequestDTO, fornecedor);
+
+
         return fornecedorRepository.save(fornecedor);
     }
 }

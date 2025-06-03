@@ -3,7 +3,6 @@ package br.com.techsolucoes.ControleEstoque.controller;
 import br.com.techsolucoes.ControleEstoque.DTO.FornecedorRequestDTO;
 import br.com.techsolucoes.ControleEstoque.DTO.FornecedorResponseDTO;
 import br.com.techsolucoes.ControleEstoque.entity.Fornecedor;
-import br.com.techsolucoes.ControleEstoque.exception.CategoriaNotFoundException;
 import br.com.techsolucoes.ControleEstoque.service.FornecedorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -32,12 +31,8 @@ public class FornecedorController {
     @Operation(summary = "Listar fornecedores", description = "Retorna a lista de todos os fornecedores cadastrados.")
     @GetMapping
     public ResponseEntity<List<FornecedorResponseDTO>> listar() {
-        try {
-            List<FornecedorResponseDTO> fornecedores = fornecedorService.listar();
-            return ResponseEntity.ok(fornecedores);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        List<FornecedorResponseDTO> fornecedores = fornecedorService.listar();
+        return ResponseEntity.ok(fornecedores);
     }
 
     @Operation(summary = "Buscar fornecedor por ID", description = "Retorna os dados de um fornecedor com base no ID informado.")
@@ -46,24 +41,16 @@ public class FornecedorController {
             @ApiResponse(responseCode = "404", description = "Fornecedor não encontrado")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<Fornecedor> buscar(@PathVariable long id) {
-        try {
-            Fornecedor fornecedor = fornecedorService.buscar(id);
-            return ResponseEntity.ok(fornecedor);
-        } catch (CategoriaNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Fornecedor> buscar(@PathVariable Long id) {
+       Fornecedor fornecedor = fornecedorService.buscar(id);
+       return ResponseEntity.ok(fornecedor);
     }
 
     @Operation(summary = "Deletar fornecedor", description = "Remove um fornecedor do sistema com base no ID informado.")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable long id) {
-        try {
-            fornecedorService.deletar(id);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (CategoriaNotFoundException e) {
-            return ResponseEntity.noContent().build(); //Retorna 204
-        }
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        fornecedorService.deletar(id);
+        return ResponseEntity.noContent().build();
 
     }
 
