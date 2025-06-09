@@ -1,7 +1,6 @@
 package br.com.techsolucoes.ControleEstoque.controller;
 
 import br.com.techsolucoes.ControleEstoque.DTO.ProdutoRequestDTO;
-import br.com.techsolucoes.ControleEstoque.entity.Produto;
 import br.com.techsolucoes.ControleEstoque.service.ProdutoService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
