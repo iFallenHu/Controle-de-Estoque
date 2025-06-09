@@ -1,15 +1,15 @@
 package br.com.techsolucoes.ControleEstoque.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "produto")
-@AllArgsConstructor
 @Data
+@NoArgsConstructor
 public class Produto {
 
     @Id
