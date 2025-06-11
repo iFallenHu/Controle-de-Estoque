@@ -6,6 +6,9 @@ import br.com.techsolucoes.ControleEstoque.DTO.UsuarioResponseDTO;
 import br.com.techsolucoes.ControleEstoque.security.jwt.JwtService;
 import br.com.techsolucoes.ControleEstoque.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,16 +35,17 @@ public class LoginController {
             return ResponseEntity.ok().body("{\"token\": \"" + token + "\"}");
             //return null;
         } else {
-            return ResponseEntity.status(401).body("{\"error\": \"Credenciais inválidas\"}");
+            Map<String, String> errorBody = Map.of("error", "Credenciais inválidas");
+            return ResponseEntity.status(401).body(errorBody);
         }
     }
 
 
 
     @Operation(summary = "Registrar um novo usuário", description = "Retorna o novo usuário cadastrado.")
-//    @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso",
-//            content = @Content(mediaType = "application/json",
-//                    schema = @Schema(implementation = UsuarioResponseDTO.class)))
+    @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = UsuarioResponseDTO.class)))
     @PostMapping("/register")
     public ResponseEntity<UsuarioResponseDTO> cadastrarUsuario(@Valid @RequestBody UsuarioRequestDTO usuarioRequestDTO) {
         usuarioService.verificarEmailDuplicado(usuarioRequestDTO.getEmail());

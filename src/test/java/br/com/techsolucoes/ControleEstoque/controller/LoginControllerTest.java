@@ -1,24 +1,28 @@
 package br.com.techsolucoes.ControleEstoque.controller;
 
-import br.com.techsolucoes.ControleEstoque.DTO.UsuarioRequestDTO;
 import br.com.techsolucoes.ControleEstoque.DTO.UsuarioLoginDTO;
-import br.com.techsolucoes.ControleEstoque.entity.Usuario;
+import br.com.techsolucoes.ControleEstoque.DTO.UsuarioRequestDTO;
+import br.com.techsolucoes.ControleEstoque.DTO.UsuarioResponseDTO;
+import br.com.techsolucoes.ControleEstoque.entity.Perfil;
+import br.com.techsolucoes.ControleEstoque.security.jwt.JwtService;
 import br.com.techsolucoes.ControleEstoque.service.UsuarioService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.Optional;
-
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
 @WebMvcTest(LoginController.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class LoginControllerTest {
 
     @Autowired
@@ -27,94 +31,81 @@ public class LoginControllerTest {
     @MockBean
     private UsuarioService usuarioService;
 
-//    @MockBean
-//    private JwtUtil jwtUtil;
+    @MockBean
+    private JwtService jwtService;
 
-//    @Test
-//    public void deveRetornarTokenQuandoAutenticado() throws Exception {
-//        UsuarioLoginDTO loginDTO = new UsuarioLoginDTO("joao@empresa.com", "123456");
-//
-//        Mockito.when(usuarioService.autenticar(loginDTO.getEmail(), loginDTO.getSenha()))
-//                .thenReturn(true);
-//        Mockito.when(jwtUtil.generateToken(loginDTO.getEmail()))
-//                .thenReturn("fake-jwt-token");
-//
-//        mockMvc.perform(MockMvcRequestBuilders.post("/login")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content("{\"email\": \"joao@empresa.com\", \"senha\": \"123456\"}"))
-//                .andExpect(status().isOk())
-//                .andExpect(content().json("{\"token\": \"fake-jwt-token\"}"));
-//    }
+    @Autowired
+    private ObjectMapper objectMapper;
+
 
     @Test
-    public void deveRetornar401QuandoCredenciaisInvalidas() throws Exception {
-        UsuarioLoginDTO loginDTO = new UsuarioLoginDTO("joao@empresa.com", "senhaErrada");
+    void deveRetornarTokenQuandoLoginForValido() throws Exception {
+        String email = "teste@email.com";
+        String senha = "123456";
+        String token = "jwt_token_falso";
 
-        Mockito.when(usuarioService.autenticar(loginDTO.getEmail(), loginDTO.getSenha()))
-                .thenReturn(false);
+        when(usuarioService.autenticar2(email, senha)).thenReturn(true);
+        when(jwtService.generateToken(email)).thenReturn(token);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/login")
+        String jsonRequest = """
+                {
+                    "email": "teste@email.com",
+                    "senha": "123456"
+                }
+                """;
+
+        mockMvc.perform(post("/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\": \"joao@empresa.com\", \"senha\": \"senhaErrada\"}"))
-                .andExpect(status().isUnauthorized())
-                .andExpect(content().json("{\"error\": \"Credenciais inválidas\"}"));
+                        .content(jsonRequest))
+                .andExpect(status().isOk())
+                .andExpect(content().json("{\"token\": \"" + token + "\"}"));
     }
 
+    @Test
+    void deveRetornar401QuandoLoginForInvalido() throws Exception {
+        UsuarioLoginDTO loginDTO = new UsuarioLoginDTO("email@email.com", "senhaErrada");
 
-//    @Test
-//    public void deveCadastrarUsuarioComSucesso() throws Exception {
-//        UsuarioRequestDTO usuarioDTO = new UsuarioRequestDTO();
-//        usuarioDTO.setNome("João");
-//        usuarioDTO.setEmail("joao@empresa.com");
-//        usuarioDTO.setSenha("123456");
-//        //usuarioDTO.setPerfil("USER");
-//
-//        Usuario novoUsuario = Usuario.builder()
-//                .id(1L)
-//                .nome("João")
-//                .email("joao@empresa.com")
-//                .senha("123456")
-//                //.perfil("USER")
-//                .build();
-//
-//        // Mock: nenhum usuário existente
-//        Mockito.when(usuarioService.buscarPorEmail(Mockito.eq("joao@empresa.com")))
-//                .thenReturn(Optional.empty());
-//        // Mock: salvar novo usuário
-//        Mockito.when(usuarioService.salvar(Mockito.any(Usuario.class)))
-//                .thenReturn(novoUsuario);
-//
-//        mockMvc.perform(MockMvcRequestBuilders.post("/login/register")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content("{\"nome\": \"João\", \"email\": \"joao@empresa.com\", \"senha\": \"123456\"}"))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.id").value(1L))
-//                .andExpect(jsonPath("$.nome").value("João"))
-//                .andExpect(jsonPath("$.email").value("joao@empresa.com"));
-//                //.andExpect(jsonPath("$.perfil").value("USER"));
-//
-//        Mockito.verify(usuarioService).buscarPorEmail("joao@empresa.com");
-//        Mockito.verify(usuarioService).salvar(Mockito.any(Usuario.class));
-//    }
+        when(usuarioService.autenticar2(loginDTO.getEmail(), loginDTO.getSenha())).thenReturn(false);
 
+        mockMvc.perform(post("/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(loginDTO)))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.error").value("Credenciais inválidas"));
+    }
 
-//    @Test
-//    public void deveRetornarErroQuandoEmailJaCadastrado() throws Exception {
-//        Usuario existente = new Usuario();
-//        existente.setEmail("joao@empresa.com");
-//
-//        Mockito.when(usuarioService.buscarPorEmail(Mockito.eq("joao@empresa.com")))
-//                .thenReturn(Optional.of(existente));
-//
-//        mockMvc.perform(MockMvcRequestBuilders.post("/login/register")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        //.content("{\"nome\": \"João\", \"email\": \"joao@empresa.com\", \"senha\": \"123456\", \"perfil\": \"USER\"}"))
-//                        .content("{\"nome\": \"João\", \"email\": \"joao@empresa.com\", \"senha\": \"123456\"}"))
-//                .andExpect(status().isBadRequest())
-//                .andExpect(content().string(org.hamcrest.Matchers.containsString("Email já cadastrado")));
-//
-//        Mockito.verify(usuarioService).buscarPorEmail("joao@empresa.com");
-//        Mockito.verify(usuarioService, Mockito.never()).salvar(Mockito.any(Usuario.class));
-//    }
+    @Test
+    void deveCadastrarUsuarioComSucesso() throws Exception {
+        UsuarioRequestDTO requestDTO = new UsuarioRequestDTO("João", "joao@email.com", "senha123", Perfil.OPERADOR);
+        UsuarioResponseDTO responseDTO = new UsuarioResponseDTO(1L, "João", "joao@email.com", Perfil.OPERADOR);
+
+        doNothing().when(usuarioService).verificarEmailDuplicado(requestDTO.getEmail());
+        when(usuarioService.salvar(any(UsuarioRequestDTO.class))).thenReturn(responseDTO);
+
+        String jsonRequest = """
+                {
+                    "nome": "João",
+                    "email": "joao@email.com",
+                    "senha": "senha123",
+                    "perfil": "OPERADOR"
+                }
+                """;
+
+        String expectedResponse = """
+                {
+                    "id": 1,
+                    "nome": "João",
+                    "email": "joao@email.com",
+                    "perfil": "OPERADOR"
+                }
+                """;
+
+        mockMvc.perform(post("/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest))
+                .andExpect(status().isCreated())
+                .andExpect(content().json(expectedResponse));
+    }
 
 }

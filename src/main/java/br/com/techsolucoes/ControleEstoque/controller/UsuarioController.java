@@ -19,10 +19,6 @@ import java.util.List;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
-    // listar
-    // criar
-    // deletar
-    // atualizar
 
     @Operation(summary = "Registrar um novo usuário", description = "Retorna o novo usuário cadastrado.")
     @PostMapping
