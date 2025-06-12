@@ -23,21 +23,22 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(body);
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleValidationErrors(MethodArgumentNotValidException ex) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("status", HttpStatus.BAD_REQUEST.value());
-        body.put("timestamp", LocalDateTime.now());
-
-        Map<String, String> erros = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(error ->
-                erros.put(error.getField(), error.getDefaultMessage())
-        );
-
-        body.put("erros", erros);
-
-        return ResponseEntity.badRequest().body(body);
-    }
+    //certo
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    public ResponseEntity<Map<String, Object>> handleValidationErrors(MethodArgumentNotValidException ex) {
+//        Map<String, Object> body = new HashMap<>();
+//        body.put("status", HttpStatus.BAD_REQUEST.value());
+//        body.put("timestamp", LocalDateTime.now());
+//
+//        Map<String, String> erros = new HashMap<>();
+//        ex.getBindingResult().getFieldErrors().forEach(error ->
+//                erros.put(error.getField(), error.getDefaultMessage())
+//        );
+//
+//        body.put("erros", erros);
+//
+//        return ResponseEntity.badRequest().body(body);
+//    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
