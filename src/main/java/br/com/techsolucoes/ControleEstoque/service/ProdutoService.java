@@ -1,6 +1,7 @@
 package br.com.techsolucoes.ControleEstoque.service;
 
 import br.com.techsolucoes.ControleEstoque.DTO.ProdutoRequestDTO;
+import br.com.techsolucoes.ControleEstoque.DTO.ProdutoResponseDTO;
 import br.com.techsolucoes.ControleEstoque.entity.Categoria;
 import br.com.techsolucoes.ControleEstoque.entity.Fornecedor;
 import br.com.techsolucoes.ControleEstoque.entity.Produto;
@@ -13,6 +14,7 @@ import br.com.techsolucoes.ControleEstoque.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -49,4 +51,13 @@ public class ProdutoService {
         return produtoRepository.save(produto);
     }
 
+    public List<ProdutoResponseDTO> listar() {
+        List<Produto> produtos = produtoRepository.findAll();
+
+        if (produtos.isEmpty()) {
+            throw new ResourceNotFoundException("Nenhum fornecedor encontrado.");
+        }
+
+        return produtoMapper.toDTOList(produtos);
+    }
 }

@@ -1,6 +1,8 @@
 package br.com.techsolucoes.ControleEstoque.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +11,8 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "produto")
 @Data
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class Produto {
 
@@ -29,10 +33,10 @@ public class Produto {
     private String unidadeMedida;
 
     @Column(name = "estoque_minimo")
-    private Integer estoqueMinimo = 0;
+    private Integer estoqueMinimo;
 
     @Column(name = "quantidade_atual")
-    private Integer quantidadeAtual = 0;
+    private Integer quantidadeAtual;
 
     private BigDecimal preco;
 

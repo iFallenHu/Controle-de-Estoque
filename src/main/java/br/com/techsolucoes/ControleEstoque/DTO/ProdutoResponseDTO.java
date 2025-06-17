@@ -1,7 +1,10 @@
 package br.com.techsolucoes.ControleEstoque.DTO;
 
+import lombok.Data;
+
 import java.math.BigDecimal;
 
+@Data
 public class ProdutoResponseDTO {
 
     private Long id;
@@ -9,8 +12,8 @@ public class ProdutoResponseDTO {
     private String codigo;
     private String descricao;
     private String unidadeMedida;
-    private Integer estoqueMinimo = 0;
-    private Integer quantidadeAtual = 0;
+    private Integer estoqueMinimo;
+    private Integer quantidadeAtual;
     private BigDecimal preco;
     private Long categoriaId;
     private Long fornecedorId;
