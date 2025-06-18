@@ -3,9 +3,12 @@ package br.com.techsolucoes.ControleEstoque.controller;
 import br.com.techsolucoes.ControleEstoque.DTO.FornecedorResponseDTO;
 import br.com.techsolucoes.ControleEstoque.DTO.ProdutoRequestDTO;
 import br.com.techsolucoes.ControleEstoque.DTO.ProdutoResponseDTO;
+import br.com.techsolucoes.ControleEstoque.entity.Fornecedor;
 import br.com.techsolucoes.ControleEstoque.entity.Produto;
 import br.com.techsolucoes.ControleEstoque.service.ProdutoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,4 +37,14 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoResponseDTOS);
     }
 
+    @Operation(summary = "Buscar fornecedor por ID", description = "Retorna os dados de um produto com base no ID informado.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Produto encontrado"),
+            @ApiResponse(responseCode = "404", description = "Produto não encontrado")
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<Produto> buscar(@PathVariable Long id) {
+        Produto produto = produtoService.buscar(id);
+        return ResponseEntity.ok(produto);
+    }
 }

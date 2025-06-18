@@ -60,4 +60,9 @@ public class ProdutoService {
 
         return produtoMapper.toDTOList(produtos);
     }
+
+    public Produto buscar(Long id) {
+        return produtoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Produto com ID " + id + " Não encontrada"));
+    }
 }
