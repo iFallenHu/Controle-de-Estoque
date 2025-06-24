@@ -65,4 +65,30 @@ public class ProdutoService {
         return produtoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Produto com ID " + id + " Não encontrada"));
     }
+    public void deletar(Long id) {
+        Produto produto = produtoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Fornecedor com ID " + id + " não encontrado."));
+
+        produtoRepository.deleteById(produto.getId());
+    }
+
+
+    public Produto atualizar(Long id, ProdutoRequestDTO produtoRequestDTO) {
+        Produto produtoExistente = produtoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado com ID: " + id));
+
+        // Atualiza os campos do produto com base no DTO
+        produtoMapper.atualizarProdutoComDTO(produtoRequestDTO, produtoExistente);
+
+        // Atualiza as entidades relacionadas, se necessário
+        Categoria categoria = categoriaRepository.findById(produtoRequestDTO.getCategoriaId())
+                .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada com ID: " + produtoRequestDTO.getCategoriaId()));
+        Fornecedor fornecedor = fornecedorRepository.findById(produtoRequestDTO.getFornecedorId())
+                .orElseThrow(() -> new ResourceNotFoundException("Fornecedor não encontrado com ID: " + produtoRequestDTO.getFornecedorId()));
+
+        produtoExistente.setCategoria(categoria);
+        produtoExistente.setFornecedor(fornecedor);
+
+        return produtoRepository.save(produtoExistente);
+    }
 }

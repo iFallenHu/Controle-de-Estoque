@@ -1,5 +1,6 @@
 package br.com.techsolucoes.ControleEstoque.controller;
 
+import br.com.techsolucoes.ControleEstoque.DTO.FornecedorRequestDTO;
 import br.com.techsolucoes.ControleEstoque.DTO.FornecedorResponseDTO;
 import br.com.techsolucoes.ControleEstoque.DTO.ProdutoRequestDTO;
 import br.com.techsolucoes.ControleEstoque.DTO.ProdutoResponseDTO;
@@ -46,5 +47,20 @@ public class ProdutoController {
     public ResponseEntity<Produto> buscar(@PathVariable Long id) {
         Produto produto = produtoService.buscar(id);
         return ResponseEntity.ok(produto);
+    }
+
+    @Operation(summary = "Deletar produto", description = "Remove um produto do sistema com base no ID informado.")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        produtoService.deletar(id);
+        return ResponseEntity.noContent().build();
+
+    }
+
+    @Operation(summary = "Atualizar produto", description = "Atualiza os dados de um produto com base no ID informado.")
+    @PutMapping("/{id}")
+    public ResponseEntity<Produto> atualizar(@PathVariable Long id, @RequestBody ProdutoRequestDTO produtoRequestDTO) {
+        Produto produtoAtualizado = produtoService.atualizar(id, produtoRequestDTO);
+        return ResponseEntity.ok(produtoAtualizado);
     }
 }

@@ -14,7 +14,13 @@ import java.util.List;
 public interface ProdutoMapper {
 
     // Converte de DTO de entrada para entidade
-    Produto toEntity(ProdutoRequestDTO dto);
+    Produto toEntity(ProdutoRequestDTO produtoRequestDTO);
+
+    // Atualiza uma entidade existente com dados do DTO
+    @Mapping(target = "id", ignore = true) // Ignora o ID ao fazer o merge
+    @Mapping(target = "categoria", ignore = true) // Ignora porque será setado manualmente
+    @Mapping(target = "fornecedor", ignore = true) // Também será setado manualmente
+    void atualizarProdutoComDTO(ProdutoRequestDTO produtoRequestDTO, @MappingTarget Produto produto);
 
     // Converte de entidade para DTO de resposta
     @Mapping(source = "categoria.id", target = "categoriaId")
@@ -28,5 +34,5 @@ public interface ProdutoMapper {
 
 
     // Atualiza os dados de uma entidade existente com os dados do DTO
-    void updateEntityFromDto(ProdutoRequestDTO dto, @MappingTarget Produto produto);
+    void updateEntityFromDto(ProdutoRequestDTO produtoRequestDTO, @MappingTarget Produto produto);
 }

@@ -11,8 +11,8 @@ public class ProdutoRequestDTO {
     private String codigo;
     private String descricao;
     private String unidadeMedida;
-    private Integer estoqueMinimo = 0;
-    private Integer quantidadeAtual = 0;
+    private Integer estoqueMinimo;
+    private Integer quantidadeAtual;
     private BigDecimal preco;
     private Long categoriaId;
     private Long fornecedorId;
