@@ -67,7 +67,7 @@ public class ProdutoService {
     }
     public void deletar(Long id) {
         Produto produto = produtoRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Fornecedor com ID " + id + " não encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Produto com ID " + id + " não encontrado."));
 
         produtoRepository.deleteById(produto.getId());
     }
