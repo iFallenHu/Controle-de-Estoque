@@ -30,7 +30,6 @@ public class ProdutoRequestDTO {
     private Integer quantidadeAtual;
 
     @NotNull(message = "O preço do produto é obrigatório")
-
     @DecimalMin(value = "0.0", inclusive = false, message = "O preço deve ser maior que zero")
     private BigDecimal preco;
 
