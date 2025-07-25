@@ -5,8 +5,8 @@ import br.com.techsolucoes.ControleEstoque.DTO.ProdutoRequestDTO;
 import br.com.techsolucoes.ControleEstoque.DTO.ProdutoResponseDTO;
 import br.com.techsolucoes.ControleEstoque.entity.Produto;
 import br.com.techsolucoes.ControleEstoque.exception.DuplicateResourceException;
+import br.com.techsolucoes.ControleEstoque.exception.ResourceNotFoundException;
 import br.com.techsolucoes.ControleEstoque.service.ProdutoService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,11 +30,11 @@ public class ProdutoControllerTest {
     @Mock
     ProdutoService produtoService;
 
-  @InjectMocks
+    @InjectMocks
     ProdutoController produtoController;
 
     @Test
-    void deveCriarProdutoERetornar201(){
+    void deveCriarProdutoERetornar201() {
         ProdutoRequestDTO produtoRequestDTO = new ProdutoRequestDTO();
         produtoRequestDTO.setNome("Produto Teste");
         produtoRequestDTO.setCodigo("COD123");
@@ -52,7 +52,7 @@ public class ProdutoControllerTest {
     }
 
     @Test
-    void deveRetornarErroQuandoProdutoJaExiste(){
+    void deveRetornarErroQuandoProdutoJaExiste() {
         ProdutoRequestDTO produtoRequestDTO = new ProdutoRequestDTO();
         produtoRequestDTO.setNome("Produto Teste");
         produtoRequestDTO.setCodigo("COD123");
@@ -68,7 +68,7 @@ public class ProdutoControllerTest {
                 .when(produtoService)
                 .cadastrar(produtoRequestDTO);
 
-        assertThatThrownBy(()-> produtoController.cadastrar(produtoRequestDTO))
+        assertThatThrownBy(() -> produtoController.cadastrar(produtoRequestDTO))
                 .isInstanceOf(DuplicateResourceException.class)
                 .hasMessageContaining("Produto já cadastrado");
 
@@ -76,7 +76,7 @@ public class ProdutoControllerTest {
     }
 
     @Test
-    void deveListarProdutoERetornar201(){
+    void deveListarProdutoERetornar201() {
         ProdutoResponseDTO produto1 = new ProdutoResponseDTO();
         produto1.setNome("Produto Teste");
         produto1.setCodigo("COD123");
@@ -150,6 +150,90 @@ public class ProdutoControllerTest {
         assertNotNull(response.getBody());
         assertEquals("Produto Teste", response.getBody().getNome());
         assertEquals(id, response.getBody().getId());
+    }
+
+    @Test
+    void deveRetornar404QuandoProdutoNaoEncontrado() {
+        Long id = 99L;
+        when(produtoService.buscar(id)).thenThrow(new ResourceNotFoundException(("Produto nao encontrado")));
+
+        assertThrows(ResourceNotFoundException.class, () -> {
+            produtoController.buscar(id);
+        });
+    }
+
+    @Test
+    void deveDeletarUmProdutoPeloId() {
+        Long id = 1L;
+        Produto produto = new Produto();
+        produto.setId(id);
+
+        doNothing().when(produtoService).deletar(id);
+
+        produtoController.deletar(id);
+
+        verify(produtoService).deletar(id);
+    }
+
+    @Test
+    void deveRetornar404() {
+        doThrow(new ResourceNotFoundException("Produto não encontrado"))
+                .when(produtoService).deletar(999L);
+
+        assertThrows(ResourceNotFoundException.class, () -> {
+            produtoController.deletar(999L);
+        });
+
+    }
+
+    @Test
+    void deveAtualizarProdutoComSucesso() {
+        // Arrange
+        Long id = 1L;
+
+        ProdutoRequestDTO dto = new ProdutoRequestDTO();
+        dto.setNome("Produto Atualizado");
+        dto.setCodigo("PROD999");
+        dto.setDescricao("Nova descrição");
+        dto.setUnidadeMedida("UN");
+        dto.setEstoqueMinimo(10);
+        dto.setQuantidadeAtual(50);
+        dto.setPreco(BigDecimal.valueOf(199.99));
+        dto.setCategoriaId(2L);
+        dto.setFornecedorId(3L);
+
+        Produto produtoAtualizado = new Produto();
+        produtoAtualizado.setId(id);
+        produtoAtualizado.setNome(dto.getNome());
+        produtoAtualizado.setCodigo(dto.getCodigo());
+        produtoAtualizado.setDescricao(dto.getDescricao());
+        produtoAtualizado.setUnidadeMedida(dto.getUnidadeMedida());
+        produtoAtualizado.setEstoqueMinimo(dto.getEstoqueMinimo());
+        produtoAtualizado.setQuantidadeAtual(dto.getQuantidadeAtual());
+        produtoAtualizado.setPreco(dto.getPreco());
+
+        when(produtoService.atualizar(id, dto)).thenReturn(produtoAtualizado);
+
+        ResponseEntity<Produto> response = produtoController.atualizar(id, dto);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals("Produto Atualizado", response.getBody().getNome());
+        assertEquals("PROD999", response.getBody().getCodigo());
+        assertEquals(BigDecimal.valueOf(199.99), response.getBody().getPreco());
+    }
+
+    @Test
+    void deveRetornarErroQuandoProdutoNaoExisteParaAtualizar() {
+        Long id = 999L;
+        ProdutoRequestDTO dto = new ProdutoRequestDTO();
+
+        doThrow(new ResourceNotFoundException("Produto não encontrado"))
+                .when(produtoService).atualizar(id, dto);
+
+        assertThrows(ResourceNotFoundException.class, () -> {
+            produtoController.atualizar(id, dto);
+        });
     }
 
 
