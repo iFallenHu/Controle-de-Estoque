@@ -6,6 +6,7 @@ import br.com.techsolucoes.ControleEstoque.DTO.ProdutoRequestDTO;
 import br.com.techsolucoes.ControleEstoque.DTO.ProdutoResponseDTO;
 import br.com.techsolucoes.ControleEstoque.entity.Fornecedor;
 import br.com.techsolucoes.ControleEstoque.entity.Produto;
+import br.com.techsolucoes.ControleEstoque.mapper.ProdutoMapper;
 import br.com.techsolucoes.ControleEstoque.service.ProdutoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
