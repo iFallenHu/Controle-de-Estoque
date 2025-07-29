@@ -63,9 +63,9 @@ public class CategoriaController {
     public ResponseEntity<Void> deletarCategoria(@PathVariable long id) {
         try {
             categoriaService.deletarCategoria(id);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            return ResponseEntity.noContent().build();
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.noContent().build(); //Retorna 204
+            return ResponseEntity.notFound().build();
         }
 
     }
