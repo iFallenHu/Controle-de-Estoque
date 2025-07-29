@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -78,18 +79,22 @@ public class FornecedorControllerTest {
     }
 
     @Test
-    void deveRetornarNotFoundQuandoFornecedorNaoExiste() {
-        // Arrange
-        Long id = 1L;
-        when(fornecedorService.buscar(id)).thenThrow(new ResourceNotFoundException("Fornecedor não encontrado"));
+    void deveLancarResourceNotFoundQuandoFornecedorNaoExiste() {
+        Long id = 99L;
 
-        // Act
-        ResponseEntity<Fornecedor> response = fornecedorController.buscar(id);
+        when(fornecedorService.buscar(id))
+                .thenThrow(new ResourceNotFoundException("Fornecedor com ID " + id + " Não encontrada"));
 
-        // Assert
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        ResourceNotFoundException exception = assertThrows(
+                ResourceNotFoundException.class,
+                () -> fornecedorController.buscar(id)
+        );
+
+        assertEquals("Fornecedor com ID 99 Não encontrada", exception.getMessage());
         verify(fornecedorService, times(1)).buscar(id);
     }
+
+
 
     @Test
     void deveDeletarFornecedorComSucesso() {
@@ -100,7 +105,7 @@ public class FornecedorControllerTest {
         ResponseEntity<Void> response = fornecedorController.deletar(id);
 
         // Assert
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         verify(fornecedorService, times(1)).deletar(id);
     }
 
@@ -111,10 +116,13 @@ public class FornecedorControllerTest {
         doThrow(new ResourceNotFoundException("Fornecedor não encontrado")).when(fornecedorService).deletar(id);
 
         // Act
-        ResponseEntity<Void> response = fornecedorController.deletar(id);
+        ResourceNotFoundException exception = assertThrows(
+                ResourceNotFoundException.class,
+                () -> fornecedorController.deletar(id)
+        );
 
         // Assert
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        assertEquals("Fornecedor não encontrado", exception.getMessage());
         verify(fornecedorService, times(1)).deletar(id);
     }
 

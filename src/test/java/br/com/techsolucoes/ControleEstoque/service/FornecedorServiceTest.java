@@ -3,6 +3,7 @@ package br.com.techsolucoes.ControleEstoque.service;
 import br.com.techsolucoes.ControleEstoque.DTO.FornecedorRequestDTO;
 import br.com.techsolucoes.ControleEstoque.DTO.FornecedorResponseDTO;
 import br.com.techsolucoes.ControleEstoque.entity.Fornecedor;
+import br.com.techsolucoes.ControleEstoque.exception.ResourceNotFoundException;
 import br.com.techsolucoes.ControleEstoque.mapper.FornecedorMapper;
 import br.com.techsolucoes.ControleEstoque.repository.FornecedorRepository;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -127,8 +129,8 @@ public class FornecedorServiceTest {
         when(fornecedorRepository.findAll()).thenReturn(List.of()); // Simula lista vazia
 
         // Act & Assert
-        IllegalStateException exception = assertThrows(
-                IllegalStateException.class,
+        ResourceNotFoundException exception = assertThrows(
+                ResourceNotFoundException.class,
                 () -> fornecedorService.listar()
         );
 
@@ -162,23 +164,40 @@ public class FornecedorServiceTest {
                 fornecedorService.deletar(id)
         );
 
-        assertEquals("Fornecedor não encontrado", exception.getMessage());
+        assertEquals("Fornecedor com ID 999 não encontrado.", exception.getMessage());
         verify(fornecedorRepository, never()).deleteById(anyLong());
     }
 
     @Test
-    void DeveAtualizarFornecedor() {
+    void deveAtualizarFornecedor() {
         // Arrange
-        long id = 1L;
+        Long id = 1L;
 
         Fornecedor fornecedorExistente = new Fornecedor();
         fornecedorExistente.setId(id);
         fornecedorExistente.setNome("Antigo Nome");
+        fornecedorExistente.setCnpj("11111111000199");
+        fornecedorExistente.setEmail("antigo@email.com");
 
         FornecedorRequestDTO dto = new FornecedorRequestDTO();
         dto.setNome("Novo Nome");
+        dto.setCnpj("12345678000199");
+        dto.setEmail("novo@email.com");
 
-        when(fornecedorRepository.findById(id)).thenReturn(java.util.Optional.of(fornecedorExistente));
+        when(fornecedorRepository.findById(id)).thenReturn(Optional.of(fornecedorExistente));
+        when(fornecedorRepository.existsByCnpjAndIdNot(dto.getCnpj(), id)).thenReturn(false);
+        when(fornecedorRepository.existsByEmailAndIdNot(dto.getEmail(), id)).thenReturn(false);
+
+        // Simula que o mapper atualiza o objeto existente
+        doAnswer(invocation -> {
+            FornecedorRequestDTO source = invocation.getArgument(0);
+            Fornecedor target = invocation.getArgument(1);
+            target.setNome(source.getNome());
+            target.setCnpj(source.getCnpj());
+            target.setEmail(source.getEmail());
+            return null;
+        }).when(fornecedorMapper).updateEntityFromDto(eq(dto), eq(fornecedorExistente));
+
         when(fornecedorRepository.save(fornecedorExistente)).thenReturn(fornecedorExistente);
 
         // Act
@@ -187,8 +206,14 @@ public class FornecedorServiceTest {
         // Assert
         assertNotNull(atualizado);
         assertEquals("Novo Nome", atualizado.getNome());
+        assertEquals("12345678000199", atualizado.getCnpj());
+        assertEquals("novo@email.com", atualizado.getEmail());
+
+        verify(fornecedorRepository).findById(id);
         verify(fornecedorRepository).save(fornecedorExistente);
+        verify(fornecedorMapper).updateEntityFromDto(dto, fornecedorExistente);
     }
+
 
     @Test
     void NaoDeveAtualizarFornecedorQuandoNaoEncontrado() {
@@ -202,7 +227,7 @@ public class FornecedorServiceTest {
                 fornecedorService.atualizar(id, dto)
         );
 
-        assertEquals("Fornecedor não encontrada", exception.getMessage());
+        assertEquals("Fornecedor não encontrado", exception.getMessage());
     }
 
 

@@ -183,7 +183,7 @@ public class CategoriaControllerTest {
     }
 
     @Test
-    void deveDeletarUmaEntidadeERetornar200() {
+    void deveDeletarUmaEntidadeERetornar204() {
         Long id = 1L;
 
         // Simula que não acontece erro ao deletar
