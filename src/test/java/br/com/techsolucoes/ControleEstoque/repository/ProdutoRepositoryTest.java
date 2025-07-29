@@ -1,8 +1,7 @@
 package br.com.techsolucoes.ControleEstoque.repository;
 
-import br.com.techsolucoes.ControleEstoque.DTO.ProdutoRequestDTO;
+
 import br.com.techsolucoes.ControleEstoque.entity.Produto;
-import br.com.techsolucoes.ControleEstoque.mapper.ProdutoMapper;
 import br.com.techsolucoes.ControleEstoque.service.ProdutoService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
