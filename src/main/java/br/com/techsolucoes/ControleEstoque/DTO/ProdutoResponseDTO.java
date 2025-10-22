@@ -16,5 +16,7 @@ public class ProdutoResponseDTO {
     private Integer quantidadeAtual;
     private BigDecimal preco;
     private Long categoriaId;
+    private String categoriaNome;
     private Long fornecedorId;
+    private String fornecedorNome;
 }

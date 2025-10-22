@@ -1,6 +1,6 @@
 package br.com.techsolucoes.ControleEstoque.mapper;
 
-import br.com.techsolucoes.ControleEstoque.DTO.FornecedorRequestDTO;
+import br.com.techsolucoes.ControleEstoque.DTO.CategoriaDTO;
 import br.com.techsolucoes.ControleEstoque.DTO.ProdutoRequestDTO;
 import br.com.techsolucoes.ControleEstoque.DTO.ProdutoResponseDTO;
 import br.com.techsolucoes.ControleEstoque.entity.Produto;
@@ -22,14 +22,17 @@ public interface ProdutoMapper {
     @Mapping(target = "fornecedor", ignore = true) // Também será setado manualmente
     void atualizarProdutoComDTO(ProdutoRequestDTO produtoRequestDTO, @MappingTarget Produto produto);
 
+
     // Converte de entidade para DTO de resposta
     @Mapping(source = "categoria.id", target = "categoriaId")
+    @Mapping(source = "categoria.nome", target = "categoriaNome")
     @Mapping(source = "fornecedor.id", target = "fornecedorId")
+    @Mapping(source = "fornecedor.nome", target = "fornecedorNome")
     ProdutoResponseDTO toDTO(Produto produto);
 
     // Lista de entidades para lista de DTOs
-    @Mapping(source = "categoria.id", target = "categoriaId")
-    @Mapping(source = "fornecedor.id", target = "fornecedorId")
+//    @Mapping(source = "categoria", target = "categoria")
+//    @Mapping(source = "fornecedor", target = "fornecedor")
     List<ProdutoResponseDTO> toDTOList(List<Produto> produtos);
 
 
