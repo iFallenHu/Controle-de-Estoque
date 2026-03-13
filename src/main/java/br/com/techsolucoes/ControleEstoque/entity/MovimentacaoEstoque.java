@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -23,7 +24,7 @@ public class MovimentacaoEstoque {
     @Column(nullable = false)
     private Integer quantidade;
 
-    @Column(name = "data", columnDefinition = "DATE DEFAULT CURRENT_TIMESTAMP")
+    @CreationTimestamp
     private LocalDateTime data; // LocalDate
 
     @Enumerated(EnumType.STRING)
