@@ -4,6 +4,7 @@ import br.com.techsolucoes.ControleEstoque.DTO.CategoriaDTO;
 import br.com.techsolucoes.ControleEstoque.exception.ResourceNotFoundException;
 import br.com.techsolucoes.ControleEstoque.entity.Categoria;
 import br.com.techsolucoes.ControleEstoque.service.CategoriaService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,7 +31,7 @@ public class CategoriaController {
 
 
     @PostMapping
-    public ResponseEntity<Categoria> criarCategoria(@RequestBody CategoriaDTO categoriaDTO) {
+    public ResponseEntity<Categoria> criarCategoria(@RequestBody @Valid CategoriaDTO categoriaDTO) {
         try {
             Categoria novaCategoria = categoriaService.salvarCategoria(categoriaDTO);
             return new ResponseEntity<>(novaCategoria, HttpStatus.CREATED);
