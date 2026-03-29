@@ -1,13 +1,17 @@
 package br.com.techsolucoes.ControleEstoque.controller;
 
+import br.com.techsolucoes.ControleEstoque.DTO.MovimentacaoEstoqueRelatorioDTO;
 import br.com.techsolucoes.ControleEstoque.service.RelatorioService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.ByteArrayInputStream;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 public class RelatorioController {
@@ -26,5 +30,16 @@ public class RelatorioController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=estoque_baixo.pdf")
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdf.readAllBytes());
+    }
+
+
+    @GetMapping("api/relatorios/movimento-estoque")
+    public ResponseEntity<List<MovimentacaoEstoqueRelatorioDTO>> buscarRelatorioMovimentoEstoquePorDatas(
+            @RequestParam LocalDateTime dataInicio,
+            @RequestParam LocalDateTime dataFim) {
+
+        return ResponseEntity.ok(
+                relatorioService.buscarRelatorioMovimentoEstoquePorDatas(dataInicio, dataFim)
+        );
     }
 }

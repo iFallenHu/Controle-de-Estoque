@@ -1,5 +1,7 @@
 package br.com.techsolucoes.ControleEstoque.security.jwt;
 
+import br.com.techsolucoes.ControleEstoque.entity.Perfil;
+import br.com.techsolucoes.ControleEstoque.entity.Usuario;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,11 +21,20 @@ public class JwtServiceTest {
         jwtService = new JwtService();
     }
 
+    private Usuario criarUsuario(String email) {
+        Usuario usuario = new Usuario();
+        usuario.setEmail(email);
+        usuario.setId(1L);
+        usuario.setNome("Usuario Teste");
+        usuario.setPerfil(Perfil.OPERADOR);
+        return usuario;
+    }
+
     @Test
     void deveGerarTokenComUsernameValido() {
-        String username = "usuario@teste.com";
+        Usuario usuario = criarUsuario("usuario@teste.com");
 
-        String token = jwtService.generateToken(username);
+        String token = jwtService.generateToken(usuario);
 
         assertNotNull(token);
         assertFalse(token.isEmpty());
@@ -31,29 +42,41 @@ public class JwtServiceTest {
 
     @Test
     void deveExtrairUsernameDeTokenValido() {
-        String username = "usuario@teste.com";
-        String token = jwtService.generateToken(username);
+        Usuario usuario = criarUsuario("usuario@teste.com");
+
+        String token = jwtService.generateToken(usuario);
 
         String usernameExtraido = jwtService.extractUsername(token);
 
-        assertEquals(username, usernameExtraido);
+        assertEquals(usuario.getEmail(), usernameExtraido);
     }
 
     @Test
     void deveValidarTokenCorretamente() {
-        String username = "usuario@teste.com";
-        UserDetails userDetails = User.withUsername(username).password("123").roles("USER").build();
-        String token = jwtService.generateToken(username);
+        Usuario usuario = criarUsuario("usuario@teste.com");
 
+        UserDetails userDetails = User
+                .withUsername(usuario.getEmail())
+                .password("123")
+                .roles("USER")
+                .build();
+
+        String token = jwtService.generateToken(usuario);
         boolean valido = jwtService.isTokenValid(token, userDetails);
-
         assertTrue(valido);
     }
 
     @Test
     void naoDeveValidarTokenComUsernameIncorreto() {
-        String token = jwtService.generateToken("usuario@teste.com");
-        UserDetails userDetails = User.withUsername("outro@teste.com").password("123").roles("USER").build();
+        Usuario usuario = criarUsuario("usuario@teste.com");
+
+        String token = jwtService.generateToken(usuario);
+
+        UserDetails userDetails = User
+                .withUsername("outro@teste.com")
+                .password("123")
+                .roles("USER")
+                .build();
 
         boolean valido = jwtService.isTokenValid(token, userDetails);
 
@@ -64,21 +87,25 @@ public class JwtServiceTest {
     void deveDetectarTokenExpirado() throws InterruptedException {
         JwtService servicoComExpiracaoCurta = new JwtService() {
             @Override
-            public String generateToken(String username) {
+            public String generateToken(Usuario usuario) {
                 return io.jsonwebtoken.Jwts.builder()
-                        .setSubject(username)
+                        .setSubject(usuario.getEmail())
                         .setIssuedAt(new Date(System.currentTimeMillis()))
-                        .setExpiration(new Date(System.currentTimeMillis() + 100)) // 100ms
-                        .signWith(io.jsonwebtoken.SignatureAlgorithm.HS256, "sua-chave-secreta-bem-grande-e-segura".getBytes())
+                        .setExpiration(new Date(System.currentTimeMillis() + 100))
+                        .signWith(io.jsonwebtoken.SignatureAlgorithm.HS256,
+                                "sua-chave-secreta-bem-grande-e-segura".getBytes())
                         .compact();
             }
         };
 
-        String token = servicoComExpiracaoCurta.generateToken("usuario@teste.com");
+        Usuario usuario = criarUsuario("usuario@teste.com");
 
-        Thread.sleep(200); // espera expirar
+        String token = servicoComExpiracaoCurta.generateToken(usuario);
 
-        assertThrows(ExpiredJwtException.class, () -> servicoComExpiracaoCurta.extractUsername(token));
+        Thread.sleep(200);
+
+        assertThrows(ExpiredJwtException.class,
+                () -> servicoComExpiracaoCurta.extractUsername(token));
     }
 
 }
