@@ -1,6 +1,8 @@
 package br.com.techsolucoes.ControleEstoque.service;
 
+import br.com.techsolucoes.ControleEstoque.DTO.MovimentacaoEstoqueRelatorioDTO;
 import br.com.techsolucoes.ControleEstoque.DTO.ProdutoEstoqueBaixoDTO;
+import br.com.techsolucoes.ControleEstoque.repository.MovimentacaoEstoqueRepository;
 import br.com.techsolucoes.ControleEstoque.repository.ProdutoRepository;
 import com.lowagie.text.*;
 import com.lowagie.text.Font;
@@ -20,9 +22,11 @@ import java.util.List;
 public class RelatorioService {
 
     private final ProdutoRepository produtoRepository;
+    private final MovimentacaoEstoqueRepository movimentacaoEstoqueRepository;
 
-    public RelatorioService(ProdutoRepository produtoRepository) {
+    public RelatorioService(ProdutoRepository produtoRepository, MovimentacaoEstoqueRepository movimentacaoEstoqueRepository) {
         this.produtoRepository = produtoRepository;
+        this.movimentacaoEstoqueRepository = movimentacaoEstoqueRepository;
     }
 
     public ByteArrayInputStream gerarRelatorioEstoqueBaixo() {
@@ -110,4 +114,23 @@ public class RelatorioService {
 
         return new ByteArrayInputStream(out.toByteArray());
     }
+
+    public List<MovimentacaoEstoqueRelatorioDTO> buscarRelatorioMovimentoEstoquePorDatas(
+            LocalDateTime dataInicio,
+            LocalDateTime dataFim) {
+
+        return movimentacaoEstoqueRepository.buscarRelatorio(dataInicio, dataFim)
+                .stream()
+                .map(p -> MovimentacaoEstoqueRelatorioDTO.builder()
+                        .id(p.getId())
+                        .data(p.getData())
+                        .quantidade(p.getQuantidade())
+                        .tipoMovimentacao(p.getTipoMovimentacao())
+                        .motivo(p.getMotivo())
+                        .produtoNome(p.getProdutoNome())
+                        .usuarioNome(p.getUsuarioNome())
+                        .build())
+                .toList();
+    }
+
 }

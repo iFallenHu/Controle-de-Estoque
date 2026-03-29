@@ -66,7 +66,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // ⛔ Ignora o filtro para rotas públicas como login e cadastro
         String path = request.getServletPath();
-        if (path.equals("/login") || path.equals("/login/register")) {
+        if (path.equals("/login") || path.equals("/register")) {
             filterChain.doFilter(request, response);
             return;
         }
