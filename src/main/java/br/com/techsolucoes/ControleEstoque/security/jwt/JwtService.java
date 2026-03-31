@@ -1,5 +1,6 @@
 package br.com.techsolucoes.ControleEstoque.security.jwt;
 
+import br.com.techsolucoes.ControleEstoque.entity.Usuario;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -7,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 @Service
@@ -22,11 +25,27 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken(String username) {
+//    public String generateToken(Usuario usuario) {
+//        return Jwts.builder()
+//                .setSubject(usuario.getEmail())
+//                .setIssuedAt(new Date(System.currentTimeMillis()))
+//                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 horas
+//                .signWith(SignatureAlgorithm.HS256, SECRET_KEY.getBytes())
+//                .compact();
+//    }
+
+    public String generateToken(Usuario usuario) {
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", usuario.getId());
+        claims.put("nome", usuario.getNome());
+        claims.put("perfil", usuario.getPerfil());
+
         return Jwts.builder()
-                .setSubject(username)
+                .setClaims(claims)
+                .setSubject(usuario.getEmail()) // principal
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 horas
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY.getBytes())
                 .compact();
     }

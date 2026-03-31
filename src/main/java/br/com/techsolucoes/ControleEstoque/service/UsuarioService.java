@@ -37,6 +37,11 @@ public class UsuarioService {
         return responseDTO;
     }
 
+    public Optional<Usuario> autenticarEObterUsuario(String email, String senha) {
+        return usuarioRepository.findByEmail(email)
+                .filter(usuario -> passwordEncoder.matches(senha, usuario.getSenha()));
+    }
+
     public boolean autenticar(String email, String senha) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
         if(usuarioOpt.isPresent()) {
@@ -104,5 +109,17 @@ public class UsuarioService {
 
         Usuario atualizado = usuarioRepository.save(usuario);
         return modelMapper.map(atualizado, UsuarioResponseDTO.class);
+    }
+
+    public UsuarioResponseDTO buscaPorEmail(String email) {
+        var usuarioOpt = usuarioRepository.findByEmail(email);
+        var usuario = usuarioOpt.get();
+
+        return  UsuarioResponseDTO.builder()
+                .id(usuario.getId())
+                .nome(usuario.getNome())
+                .email(usuario.getEmail())
+                .perfil(usuario.getPerfil())
+                .build();
     }
 }
